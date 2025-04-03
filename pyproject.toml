@@ -1,0 +1,20 @@
+[project]
+name = "2-6-project"
+version = "1.0.0"
+description = ""
+authors = [
+    {name = "Bentheminernz",email = "65065992+Bentheminernz@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pygame-ce (>=2.5.3,<3.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "2"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
