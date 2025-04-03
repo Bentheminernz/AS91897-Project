@@ -1,0 +1,68 @@
+{
+    "id": 1,
+    "questions": [
+        {
+            "id": 1,
+            "question": "What is an easy and effective way to conserve water?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer": "Take shorter showers.",
+                    "isCorrect": true
+                }, 
+                {
+                    "id": 2,
+                    "answer": "Leave the tap running while brushing your teeth.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer": "Use a broom instead of a hose to clean driveways and sidewalks.",
+                    "isCorrect": true
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "question": "What is a common misconception about recycling?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer": "All plastics can be recycled.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 2,
+                    "answer": "Recycling is always better than composting.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer": "Recycling reduces the need for new raw materials.",
+                    "isCorrect": true
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "question": "What is a sustainable practice for reducing waste?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer": "Using reusable bags instead of plastic bags.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer": "Buying single-use products.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer": "Throwing away food scraps.",
+                    "isCorrect": false
+                }
+            ]
+        }
+    ]
+}
