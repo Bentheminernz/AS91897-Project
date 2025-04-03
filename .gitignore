@@ -173,7 +173,12 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+####### Created by me
 
 # Mac OS
 .DS_Store
 *.DS_Store
+
+# Python Junk
+*.pyc
+.pyc
