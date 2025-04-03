@@ -1,5 +1,6 @@
 import pygame
 from Components.Player import Player
+from Components.QuestionBlock import QuestionBlock
 
 pygame.init()
 
@@ -9,6 +10,7 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 Player1 = Player("./Assets/Players/Player1.png", (100, 100))
+QuestionBlock1 = QuestionBlock("./Assets/QuestionBlocks/QuestionBlock1.png", (100, 100), "Hello World!")
 
 running = True
 clock = pygame.time.Clock()
@@ -20,8 +22,10 @@ while running:
             running = False
 
     Player1.update(delta_time, screen)
+    Player1.gravity(delta_time, screen)
+    QuestionBlock1.update(screen)
 
     pygame.display.flip()
     screen.fill((0, 0, 0))
 
-pygame.quit()
+pygame.quit() 
