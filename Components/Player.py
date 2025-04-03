@@ -10,9 +10,13 @@ class Player(pygame.sprite.Sprite):
         self.gravity_force = 0
 
     # this is the function that updates the players movement
-    def update(self, delta_time, screen):
+    def update(self, *args):
+        screen = args[0]
+        delta_time = args[1]
+
         keys = pygame.key.get_pressed()
         movement = self.speed * delta_time
+        is_jump = False
 
         # handles player movement
         direction = pygame.Vector2(0, 0)
@@ -24,14 +28,17 @@ class Player(pygame.sprite.Sprite):
             direction.y -= 1
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             direction.y += 1
-        if keys[pygame.K_SPACE]:
-            if screen.get_height() - self.rect.bottom < 10:
-                direction.y -= 0.75
-                self.gravity_force = -self.speed * 0.75
+        if keys[pygame.K_SPACE] and is_jump == False and self.rect.bottom >= screen.get_height():
+            is_jump = True
+            direction.y -= 1.0
+            self.gravity_force = -self.speed
 
         # normalises the players movement so diagonal movement is not faster
         if direction.length() > 0:
             direction.normalize_ip()
+
+        if self.rect.bottom >= screen.get_height():
+            is_jump = False
 
         # updates the players position
         self.rect.x += direction.x * movement
@@ -52,7 +59,7 @@ class Player(pygame.sprite.Sprite):
 
     # this function handles the players gravity
     def gravity(self, delta_time, screen):
-        gravity_constant = 500
+        gravity_constant = 750
 
         # this increases the gravity force over time, multiplied by delta_time (delta time is just time since last frame, so it behaves nicely on all different frame rates (this is so i dont forget))
         self.gravity_force += gravity_constant * delta_time
