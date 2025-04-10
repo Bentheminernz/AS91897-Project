@@ -1,5 +1,6 @@
 import pygame
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, image_path, position):
         # creates the player
@@ -28,7 +29,11 @@ class Player(pygame.sprite.Sprite):
             direction.y -= 1
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             direction.y += 1
-        if keys[pygame.K_SPACE] and is_jump == False and self.rect.bottom >= screen.get_height():
+        if (
+            keys[pygame.K_SPACE]
+            and is_jump == False
+            and self.rect.bottom >= screen.get_height()
+        ):
             is_jump = True
             direction.y -= 1.0
             self.gravity_force = -self.speed

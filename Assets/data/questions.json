@@ -17,8 +17,8 @@
                 },
                 {
                     "id": 3,
-                    "answer_text": "Use a broom instead of a hose to clean driveways and sidewalks.",
-                    "isCorrect": true
+                    "answer_text": "Using garden sprinklers during a storm.",
+                    "isCorrect": false
                 }
             ]
         },
