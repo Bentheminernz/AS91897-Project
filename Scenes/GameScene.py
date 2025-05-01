@@ -43,6 +43,7 @@ class GameScene(Scene):
 
         random_question = fetch_random_question()
         self.question_text = random_question.get("question_title", "No question found")
+        question_id = random_question.get("id", "No question ID found")
         answers = random_question.get("answers", ["No answers found"])
 
         self.question_surface = self.font.render(
@@ -66,6 +67,7 @@ class GameScene(Scene):
                 is_correct,
                 self.player_data,
                 on_correct_answer=self.load_new_question,
+                question_id=question_id,
             )
             self.all_sprites.add(block)
             self.question_blocks.append(block)

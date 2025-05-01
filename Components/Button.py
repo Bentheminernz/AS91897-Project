@@ -1,7 +1,11 @@
 import pygame
 
-
+# this is a custom button class that is used to create buttons in the game
+# it inherits from the pygame sprite class, so it can be used in sprite groups
+# it has a text, position, font size, color, background color and a button action
 class Button(pygame.sprite.Sprite):
+    # initialises the button and sets its variables
+    # it also creates the image and rect for the button
     def __init__(
         self,
         text,
@@ -22,10 +26,15 @@ class Button(pygame.sprite.Sprite):
         self.original_rect = self.rect.copy()
         self.button_action = button_action
 
+    # this function is called when the button is clicked
+    # it checks if a button action is present, and if so, it calls it
     def perform_action(self):
         if self.button_action:
             self.button_action()
 
+    # this function is called every frame to update the button
+    # it checks if the mouse is over the button, and if so, it changes the color of the text
+    # it also checks if the button is clicked, and if so, it calls the button action
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):

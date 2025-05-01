@@ -1,7 +1,10 @@
 import pygame
 
-
+# this is a custom question block class that is used to create question blocks in the game
+# it inherits from the pygame sprite class, so it can be used in sprite groups
+# it has an image, a position, a text, a color, a background color and a button action
 class QuestionBlock(pygame.sprite.Sprite):
+    # initialises the question block and sets its variables
     def __init__(
         self, image_path, position, text, is_correct, player_data, on_correct_answer, question_id
     ):
@@ -23,6 +26,9 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.image.blit(text_surface, text_rect)
         self.rect = self.image.get_rect(topleft=position)
 
+    # this function is called upon every frame to check for collisions
+    # if the player is colliding with the question block, it kills the block
+    # and adds the score to the player data, if the answer is correct
     def on_collision(self, player):
         if self.rect.colliderect(player.rect) and not self.is_killed:
             print("Collision detected!")

@@ -1,6 +1,8 @@
 import pygame
 
-
+# this is the player class, it inherits from the pygame sprite class, so it can be used in sprite groups
+# it has an image, a rect, a speed and a gravity force
+# it also has a function to update the players movement and a function to handle the players gravity
 class Player(pygame.sprite.Sprite):
     def __init__(self, image_path, position):
         # creates the player

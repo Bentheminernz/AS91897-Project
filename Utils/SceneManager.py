@@ -34,3 +34,7 @@ class SceneManager:
     def render(self, screen):
         if self.current_scene:
             self.current_scene.render(screen)
+    
+    def quit_game(self):
+        pygame.quit()
+        exit(0)
