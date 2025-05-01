@@ -2,7 +2,9 @@ import pygame
 
 
 class QuestionBlock(pygame.sprite.Sprite):
-    def __init__(self, image_path, position, text, is_correct, player_data):
+    def __init__(
+        self, image_path, position, text, is_correct, player_data, on_correct_answer
+    ):
         super().__init__()
         self.original_image = pygame.image.load(image_path)
         self.original_image = pygame.transform.scale(self.original_image, (100, 100))
@@ -10,6 +12,7 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.is_killed = False
         self.is_correct = is_correct
         self.player_data = player_data
+        self.on_correct_answer = on_correct_answer
 
         self.image = self.original_image.copy()
         font = pygame.font.Font(None, 18)
@@ -26,6 +29,9 @@ class QuestionBlock(pygame.sprite.Sprite):
             if self.is_correct:
                 print("Correct answer!")
                 self.player_data["score"] += 1
+
+                if self.on_correct_answer:
+                    self.on_correct_answer()
 
             self.is_killed = True
             self.kill()

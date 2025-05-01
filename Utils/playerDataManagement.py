@@ -1,6 +1,7 @@
 import os
 import json
 
+
 def save_player_data(player_data):
     print("Saving player data...")
     if not os.path.exists("./SaveData/player_data.json"):
@@ -10,6 +11,7 @@ def save_player_data(player_data):
     with open("./SaveData/player_data.json", "w") as f:
         print("Writing player data to JSON file...")
         json.dump(player_data, f, indent=4)
+
 
 def load_player_data():
     print("Loading player data...")
