@@ -1,9 +1,11 @@
 import pygame
 from Components.Player import Player
 from Components.QuestionBlock import QuestionBlock
+from Components.Button import Button
 from Utils.fetchGitCommitCount import fetch_git_commit_count
 from Utils.fetchRandomQuestion import fetch_random_question
 from Utils.fetchGitCommitID import fetch_git_commit_id
+from Utils import playerDataManagement
 
 # defines some variables, based on functions from my utils.
 # build number based on commits in my repo
@@ -14,9 +16,7 @@ commit_id = fetch_git_commit_id()
 random_question = fetch_random_question()
 
 global player_data
-player_data = {
-    "score": 0,
-}
+player_data = playerDataManagement.load_player_data()
 
 pygame.init()
 
@@ -26,6 +26,7 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption(f"2.6 Platformer Build {build_number} ({commit_id})")
 all_sprites = pygame.sprite.Group()
+all_buttons = pygame.sprite.Group()
 
 # create player and adds to all sprites group
 Player1 = Player("./Assets/Players/Player1.png", (650, 650))
@@ -59,11 +60,22 @@ for i, answer in enumerate(answers):
 
 print(f"Question Blocks: {question_blocks}")
 
+save_button = Button(
+    "Save",
+    (100, 100),
+    font_size=24,
+    color=(255, 255, 255),
+    bg_color=(0, 0, 0),
+    button_action=lambda: playerDataManagement.save_player_data(player_data),
+)
+all_buttons.add(save_button)
+
 font = pygame.font.Font(None, 36)
 question_surface = font.render(question_text, True, (255, 255, 255))
 
 running = True
 clock = pygame.time.Clock()
+
 while running:
     delta_time = clock.tick(60) / 1000.0
 
@@ -81,9 +93,11 @@ while running:
         block.on_collision(Player1)
 
     all_sprites.update(screen, delta_time)
+    all_buttons.update()
     screen.fill((0, 0, 0))
 
     all_sprites.draw(screen)
+    all_buttons.draw(screen)
     screen.blit(question_surface, (10, 10))
     screen.blit(player_score, (675, 10))
 
