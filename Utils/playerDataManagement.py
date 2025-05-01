@@ -24,9 +24,11 @@ def load_player_data():
         print("No player data file found. Creating new player data.")
 
         default_player_data = {
+            "player_name": "Player",
             "score": 0,
             "completed_questions": [],
             "current_question": None,
+            "completed_intro": False,
         }
 
         save_player_data(default_player_data)
