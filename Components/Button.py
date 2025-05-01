@@ -1,7 +1,16 @@
 import pygame
 
+
 class Button(pygame.sprite.Sprite):
-    def __init__(self, text, position, font_size=24, color=(255, 255, 255), bg_color=(0, 0, 0), button_action=None):
+    def __init__(
+        self,
+        text,
+        position,
+        font_size=24,
+        color=(255, 255, 255),
+        bg_color=(0, 0, 0),
+        button_action=None,
+    ):
         super().__init__()
         self.font = pygame.font.Font(None, font_size)
         self.text = text

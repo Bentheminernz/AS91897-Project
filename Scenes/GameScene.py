@@ -1,0 +1,95 @@
+import pygame
+from Components.Player import Player
+from Components.Button import Button
+from Components.QuestionBlock import QuestionBlock
+from Utils.SceneManager import Scene
+from Utils.fetchRandomQuestion import fetch_random_question
+from Utils import playerDataManagement
+
+class GameScene(Scene):
+    def __init__(self, scene_manager, player_data):
+        self.scene_manager = scene_manager
+        self.player_data = player_data
+
+        self.all_sprites = pygame.sprite.Group()
+        self.all_buttons = pygame.sprite.Group()
+        self.question_blocks = []
+
+        self.player = Player("./Assets/Players/Player1.png", (650, 650))
+        self.all_sprites.add(self.player)
+
+        self.save_button = Button(
+            "Save Game",
+            (400, 300),
+            font_size=30,
+            color=(255, 255, 255),
+            bg_color=(0, 100, 0),
+            button_action=lambda: playerDataManagement.save_player_data(self.player_data),
+        )
+        self.all_buttons.add(self.save_button)
+
+        self.font = pygame.font.Font(None, 36)
+
+        self.player_score = self.font.render(
+            f"Score: {self.player_data['score']}", True, (255, 255, 255)
+        )
+
+        self.load_new_question()
+
+    def load_new_question(self):
+        for block in self.question_blocks:
+            self.all_sprites.remove(block)
+        self.question_blocks.clear()
+
+        random_question = fetch_random_question()
+        self.question_text = random_question.get("question_title", "No question found")
+        answers = random_question.get("answers", ["No answers found"])
+
+        self.question_surface = self.font.render(
+            self.question_text, True, (255, 255, 255)
+        )
+
+        start_x = 125
+        start_y = 200
+        spacing = 225
+
+        for i, answer in enumerate(answers):
+            answer_text = answer.get("answer_text", "No answer text found")
+            is_correct = answer.get("isCorrect", False)
+            print(answer_text)
+            block_x = start_x + (i * spacing)
+            block_y = start_y
+            block = QuestionBlock(
+                "./Assets/QuestionBlocks/QuestionBlock1.png",
+                (block_x, block_y),
+                answer_text,
+                is_correct,
+                self.player_data,
+                on_correct_answer=self.load_new_question,
+            )
+            self.all_sprites.add(block)
+            self.question_blocks.append(block)
+    
+    def handle_events(self, events):
+        for event in events:
+            if event.type == pygame.QUIT:
+                playerDataManagement.save_player_data(self.player_data)
+                return False
+        return True
+    
+    def update(self, delta_time):
+        self.player.gravity(delta_time, self.scene_manager.screen)
+
+        for block in self.question_blocks:
+            block.on_collision(self.player)
+
+        self.all_sprites.update(self.scene_manager.screen, delta_time)
+        self.all_buttons.update()
+    
+    def render(self, screen):
+        screen.fill((0, 0, 0))
+        
+        self.all_sprites.draw(screen)
+        self.all_buttons.draw(screen)
+        screen.blit(self.player_score, (10, 10))
+        screen.blit(self.question_surface, (10, 10))
