@@ -1,5 +1,6 @@
 import pygame
 
+# defines a base scene class, that is inherited by all scenes
 class Scene:
     def __init__(self):
         pass
@@ -13,6 +14,7 @@ class Scene:
     def render(self, screen):
         pass
 
+# defines a scene manager class, this manages the current scene and handles the events, update and render methods
 class SceneManager:
     def __init__(self, screen):
         self.current_scene = None

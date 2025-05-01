@@ -20,7 +20,7 @@ class GameScene(Scene):
 
         self.save_button = Button(
             "Save Game",
-            (400, 300),
+            (60, 580),
             font_size=30,
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
@@ -91,5 +91,5 @@ class GameScene(Scene):
         
         self.all_sprites.draw(screen)
         self.all_buttons.draw(screen)
-        screen.blit(self.player_score, (10, 10))
+        screen.blit(self.player_score, (650, 10))
         screen.blit(self.question_surface, (10, 10))
