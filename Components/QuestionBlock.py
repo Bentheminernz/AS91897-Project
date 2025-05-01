@@ -3,7 +3,7 @@ import pygame
 
 class QuestionBlock(pygame.sprite.Sprite):
     def __init__(
-        self, image_path, position, text, is_correct, player_data, on_correct_answer
+        self, image_path, position, text, is_correct, player_data, on_correct_answer, question_id
     ):
         super().__init__()
         self.original_image = pygame.image.load(image_path)
@@ -13,6 +13,7 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.is_correct = is_correct
         self.player_data = player_data
         self.on_correct_answer = on_correct_answer
+        self.question_id = question_id
 
         self.image = self.original_image.copy()
         font = pygame.font.Font(None, 18)
