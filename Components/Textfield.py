@@ -1,5 +1,5 @@
 import pygame
-
+from Utils.loggerConfig import component_logger
 
 # this is a custom text field class that is used to create text fields in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
@@ -10,7 +10,7 @@ class TextField(pygame.sprite.Sprite):
     def __init__(self, font, initial_text="", label_text="", position=(0, 0), max_length=20, padding=5):
         super().__init__()
         self.font = font
-        self.text = initial_text
+        self.text = initial_text if initial_text else ""
         self.label_text = label_text
         self.max_length = max_length
         self.padding = padding
@@ -80,7 +80,7 @@ class TextField(pygame.sprite.Sprite):
         # handles key events for the text field
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_RETURN:
-                print(self.text)
+                component_logger.info(f"Text entered: {self.text}")
                 self.text = ""
             elif event.key == pygame.K_BACKSPACE:
                 self.text = self.text[:-1]

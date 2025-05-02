@@ -1,4 +1,5 @@
 import pygame
+from Utils.loggerConfig import scene_logger
 
 # defines a base scene class, that is inherited by all scenes
 class Scene:
@@ -21,6 +22,7 @@ class SceneManager:
         self.screen = screen
 
     def set_scene(self, scene):
+        scene_logger.info(f"Scene Manager: Switching to {scene.__class__.__name__}")
         self.current_scene = scene
 
     def handle_events(self, events):

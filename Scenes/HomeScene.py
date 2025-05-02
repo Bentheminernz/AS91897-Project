@@ -8,9 +8,9 @@ class HomeScene(Scene):
     def __init__(self, scene_manager, player_data):
         self.scene_manager = scene_manager
         self.player_data = player_data
-        self.has_completed_intro = player_data.get("completed_intro", False)
         self.all_buttons = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()
+        self.player_name = player_data.get("player_name", "Player")
 
         self.start_button = Button(
             "Start Game",
@@ -31,20 +31,10 @@ class HomeScene(Scene):
             button_action=self.scene_manager.quit_game,
         )
         self.all_buttons.add(self.quit_button)
-
-        if not self.has_completed_intro:
-            self.intro_text = TextField(
-                pygame.font.Font(None, 36),
-                "Welcome to the game!",
-                "what is your name?",
-                (200, 200),
-                max_length=50
-            )
-            textfield_instance = self.intro_text
-            value = textfield_instance.text
-
-        self.title_font = pygame.font.Font(None, 74)
-        self.title_text = self.title_font.render("Home Scene", True, (255, 255, 255))
+        
+        self.title_text = pygame.font.Font(None, 72).render(
+            f"Welcome {self.player_name}", True, (255, 255, 255)
+        )
 
     def start_game(self):
         self.scene_manager.set_scene(GameScene(self.scene_manager, self.player_data))
@@ -70,6 +60,3 @@ class HomeScene(Scene):
         screen.fill((0, 0, 0))
         screen.blit(self.title_text, (200, 100))
         self.all_buttons.draw(screen)
-        if not self.has_completed_intro:
-            self.all_textfields.update()
-            self.all_textfields.draw(screen)

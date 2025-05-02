@@ -1,4 +1,5 @@
 import pygame
+from Utils.loggerConfig import component_logger
 
 # this is a custom question block class that is used to create question blocks in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
@@ -31,11 +32,12 @@ class QuestionBlock(pygame.sprite.Sprite):
     # and adds the score to the player data, if the answer is correct
     def on_collision(self, player):
         if self.rect.colliderect(player.rect) and not self.is_killed:
-            print("Collision detected!")
-            print(f"The answer was {self.is_correct}")
+            component_logger.info(f"Player collided with question block: {self.text}")
+            component_logger.info(f"The answer was {self.is_correct}")
             if self.is_correct:
-                print("Correct answer!")
+                component_logger.info("Correct answer!")
                 self.player_data["score"] += 1
+                self.player_data["completed_questions"].append(self.question_id)
 
                 if self.on_correct_answer:
                     self.on_correct_answer()

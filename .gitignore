@@ -185,3 +185,4 @@ cython_debug/
 
 player_data.json
 *./SaveData
+*./Logs
