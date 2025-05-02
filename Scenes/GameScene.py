@@ -5,11 +5,14 @@ from Components.QuestionBlock import QuestionBlock
 from Utils.SceneManager import Scene
 from Utils.fetchRandomQuestion import fetch_random_question
 from Utils import playerDataManagement
+from Utils.loggerConfig import game_logger
 
 class GameScene(Scene):
     def __init__(self, scene_manager, player_data):
         self.scene_manager = scene_manager
         self.player_data = player_data
+        self.completed_questions = player_data.get("completed_questions", [])
+        self.has_completed_all_questions = False
 
         self.all_sprites = pygame.sprite.Group()
         self.all_buttons = pygame.sprite.Group()
@@ -41,7 +44,29 @@ class GameScene(Scene):
             self.all_sprites.remove(block)
         self.question_blocks.clear()
 
-        random_question = fetch_random_question()
+        self.player.rect.topleft = (650, 650)
+
+        attempts = 0
+        max_attempts = 10
+        random_question = None
+        
+        while attempts < max_attempts:
+            random_question = fetch_random_question()
+            question_id = random_question.get("id", "No question ID found")
+
+            if question_id not in self.completed_questions:
+                break
+            attempts += 1
+
+        if attempts >= max_attempts:
+            self.has_completed_all_questions = True
+            self.question_text = "All questions completed."
+            self.question_surface = self.font.render(
+                self.question_text, True, (255, 255, 255)
+            )
+            game_logger.info("All questions completed.")
+            return
+        
         self.question_text = random_question.get("question_title", "No question found")
         question_id = random_question.get("id", "No question ID found")
         answers = random_question.get("answers", ["No answers found"])
@@ -57,7 +82,6 @@ class GameScene(Scene):
         for i, answer in enumerate(answers):
             answer_text = answer.get("answer_text", "No answer text found")
             is_correct = answer.get("isCorrect", False)
-            print(answer_text)
             block_x = start_x + (i * spacing)
             block_y = start_y
             block = QuestionBlock(

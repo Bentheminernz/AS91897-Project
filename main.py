@@ -1,7 +1,7 @@
 import pygame
 from Utils.SceneManager import SceneManager
 from Scenes.HomeScene import HomeScene
-from Scenes.GameScene import GameScene
+from Scenes.IntroScene import IntroScene
 from Utils.fetchGitCommitCount import fetch_git_commit_count
 from Utils.fetchRandomQuestion import fetch_random_question
 from Utils.fetchGitCommitID import fetch_git_commit_id
@@ -16,6 +16,7 @@ commit_id = fetch_git_commit_id()
 
 global player_data
 player_data = playerDataManagement.load_player_data()
+has_completed_intro = player_data.get("completed_intro", False)
 
 pygame.init()
 
@@ -23,10 +24,13 @@ pygame.init()
 screen_width = 800
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption(f"2.6 Platformer Build {build_number} ({commit_id})")
+pygame.display.set_caption(f"2.6 Platformer - Based upon build: {build_number} ({commit_id})")
 
 scene_manager = SceneManager(screen)
-scene_manager.set_scene(HomeScene(scene_manager, player_data))
+if not has_completed_intro:
+    scene_manager.set_scene(IntroScene(scene_manager, player_data))
+else:
+    scene_manager.set_scene(HomeScene(scene_manager, player_data))
 
 running = True
 clock = pygame.time.Clock()

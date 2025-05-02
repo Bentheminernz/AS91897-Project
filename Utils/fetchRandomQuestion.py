@@ -1,7 +1,7 @@
 import json
 import random
 import os
-
+from Utils.loggerConfig import utils_logger
 
 # function for loading a random question from my questions.json file
 def fetch_random_question():
@@ -25,6 +25,6 @@ def fetch_random_question():
 if __name__ == "__main__":
     try:
         question = fetch_random_question()
-        print("Random Question:", question)
+        utils_logger.info(f"Random Question: {question}")
     except Exception as e:
-        print("Error:", e)
+        utils_logger.error(f"Error fetching random question: {e}")

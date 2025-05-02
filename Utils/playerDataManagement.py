@@ -1,27 +1,28 @@
 import os
 import json
+from Utils.loggerConfig import utils_logger
 
 
 def save_player_data(player_data):
-    print("Saving player data...")
+    utils_logger.info("Saving player data...")
     if not os.path.exists("./SaveData/player_data.json"):
-        print("Creating SaveData directory...")
+        utils_logger.info("Creating SaveData directory...")
         os.makedirs("./SaveData", exist_ok=True)
 
     with open("./SaveData/player_data.json", "w") as f:
-        print("Writing player data to JSON file...")
+        utils_logger.info("Writing player data to JSON file...")
         json.dump(player_data, f, indent=4)
 
 
 def load_player_data():
-    print("Loading player data...")
+    utils_logger.info("Loading player data...")
     if os.path.exists("./SaveData/player_data.json"):
-        print("Found existing player data file.")
+        utils_logger.info("Player data file found.")
         with open("./SaveData/player_data.json", "r") as f:
-            print("Reading player data from JSON file...")
+            utils_logger.info("Reading player data from JSON file...")
             return json.load(f)
     else:
-        print("No player data file found. Creating new player data.")
+        utils_logger.info("No player data file found.")
 
         default_player_data = {
             "player_name": "Player",
