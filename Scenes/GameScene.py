@@ -1,9 +1,10 @@
 import pygame
+import random
 from Components.Player import Player
 from Components.Button import Button
 from Components.QuestionBlock import QuestionBlock
 from Utils.SceneManager import Scene
-from Utils.fetchRandomQuestion import fetch_random_question
+from Utils.fetchRandomQuestion import fetch_random_question, load_specific_question
 from Utils import playerDataManagement
 from Utils.loggerConfig import game_logger
 
@@ -49,8 +50,15 @@ class GameScene(Scene):
         attempts = 0
         max_attempts = 10
         random_question = None
-        
+
+
         while attempts < max_attempts:
+            if self.player_data.get("current_question") is not None:
+                random_question = load_specific_question(
+                    self.player_data["current_question"]
+                )
+                break
+
             random_question = fetch_random_question()
             question_id = random_question.get("id", "No question ID found")
 
@@ -71,6 +79,9 @@ class GameScene(Scene):
         question_id = random_question.get("id", "No question ID found")
         answers = random_question.get("answers", ["No answers found"])
 
+        self.player_data["current_question"] = question_id
+        playerDataManagement.save_player_data(self.player_data)
+
         self.question_surface = self.font.render(
             self.question_text, True, (255, 255, 255)
         )
@@ -79,6 +90,7 @@ class GameScene(Scene):
         start_y = 200
         spacing = 225
 
+        random.shuffle(answers)
         for i, answer in enumerate(answers):
             answer_text = answer.get("answer_text", "No answer text found")
             is_correct = answer.get("isCorrect", False)

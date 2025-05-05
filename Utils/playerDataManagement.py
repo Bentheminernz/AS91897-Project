@@ -1,6 +1,7 @@
 import os
 import json
 from Utils.loggerConfig import utils_logger
+import uuid
 
 
 def save_player_data(player_data):
@@ -25,6 +26,7 @@ def load_player_data():
         utils_logger.info("No player data file found.")
 
         default_player_data = {
+            "id": str(uuid.uuid4()),
             "player_name": "Player",
             "score": 0,
             "completed_questions": [],

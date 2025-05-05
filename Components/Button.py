@@ -25,6 +25,7 @@ class Button(pygame.sprite.Sprite):
         self.original_image = self.image.copy()
         self.original_rect = self.rect.copy()
         self.button_action = button_action
+        self.is_pressed = False  # Track if button is currently pressed
 
     # this function is called when the button is clicked
     # it checks if a button action is present, and if so, it calls it
@@ -33,13 +34,29 @@ class Button(pygame.sprite.Sprite):
             self.button_action()
 
     # this function is called every frame to update the button
-    # it checks if the mouse is over the button, and if so, it changes the color of the text
-    # it also checks if the button is clicked, and if so, it calls the button action
+    # it checks if the mouse is over the button and handles hover/press states
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
+        mouse_pressed = pygame.mouse.get_pressed()[0]
+        
         if self.rect.collidepoint(mouse_pos):
             self.image = self.font.render(self.text, True, (255, 0, 0))
-            if pygame.mouse.get_pressed()[0]:
+            
+            if mouse_pressed:
+                self.is_pressed = True
+            elif self.is_pressed:
                 self.perform_action()
+                self.is_pressed = False
         else:
             self.image = self.original_image.copy()
+            if not mouse_pressed:
+                self.is_pressed = False
+                
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            if self.rect.collidepoint(event.pos) and self.is_pressed:
+                self.perform_action()
+                self.is_pressed = False
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                self.is_pressed = True
