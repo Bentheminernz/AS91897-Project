@@ -20,6 +20,26 @@ def fetch_random_question():
         # selects a random question from the json file
         random_question = random.choice(questions)
         return random_question
+    
+def load_specific_question(question_id):
+    # check if it exists, otherwise throw an error
+    json_file_path = "./Assets/data/questions.json"
+    if not os.path.exists(json_file_path):
+        raise FileNotFoundError(f"JSON file not found at {json_file_path}")
+
+    # open the json file
+    with open(json_file_path, "r") as file:
+        data = json.load(file)
+        questions = data.get("questions", [])
+        if not questions:
+            raise ValueError("No questions found in the JSON file.")
+
+        # selects a specific question from the json file
+        for question in questions:
+            if question.get("id") == question_id:
+                return question
+
+    raise ValueError(f"Question with ID {question_id} not found.")
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@
                     "id": 1,
                     "answer_text": "Take shorter showers.",
                     "isCorrect": true
-                }, 
+                },
                 {
                     "id": 2,
                     "answer_text": "Leave the tap running while brushing your teeth.",
@@ -24,42 +24,231 @@
         },
         {
             "id": 2,
-            "question_title": "What is a common misconception about recycling?",
+            "question_title": "Which of these helps keep drinking water safe?",
             "answers": [
                 {
                     "id": 1,
-                    "answer_text": "All plastics can be recycled.",
-                    "isCorrect": false
+                    "answer_text": "Storing water in a sealed, clean container.",
+                    "isCorrect": true
                 },
                 {
                     "id": 2,
-                    "answer_text": "Recycling is always better than composting.",
+                    "answer_text": "Leaving water outside uncovered.",
                     "isCorrect": false
                 },
                 {
                     "id": 3,
-                    "answer_text": "Recycling reduces the need for new raw materials.",
-                    "isCorrect": true
+                    "answer_text": "Mixing old and new water together.",
+                    "isCorrect": false
                 }
             ]
         },
         {
             "id": 3,
-            "question_title": "What is a sustainable practice for reducing waste?",
+            "question_title": "Why is handwashing important for hygiene?",
             "answers": [
                 {
                     "id": 1,
-                    "answer_text": "Using reusable bags instead of plastic bags.",
+                    "answer_text": "It removes germs that can make us sick.",
                     "isCorrect": true
                 },
                 {
                     "id": 2,
-                    "answer_text": "Buying single-use products.",
+                    "answer_text": "It wastes water without benefit.",
                     "isCorrect": false
                 },
                 {
                     "id": 3,
-                    "answer_text": "Throwing away food scraps.",
+                    "answer_text": "It makes water dirty.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "question_title": "What is one way schools can help ensure clean water for students?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Install water filters on taps.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Remove all drinking fountains.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Ask students to bring no water.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "question_title": "Which practice helps protect local rivers and lakes?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Properly disposing of trash and chemicals.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Throwing waste into storm drains.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Washing cars in the middle of a stream.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "question_title": "What can communities do to improve sanitation?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Build and maintain proper toilets and latrines.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Use fields as open toilets.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Ignore broken sanitation facilities.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "question_title": "How does planting trees help water availability?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Roots help the soil hold and filter water.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Leaves block all rain from reaching the ground.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Trees drink too much water and dry up rivers.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "question_title": "Which technology can help monitor water quality?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Sensors that detect pollutants in real time.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Blindly tasting water samples.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Ignoring lab tests completely.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "question_title": "Why should everyone learn about WASH (Water, Sanitation, Hygiene)?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "So they know how to stay healthy and protect water.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "So they can waste water faster.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "So they forget to wash their hands.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "question_title": "What role can kids play in saving water at home?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Turning off taps tightly after use.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Leaving taps dripping overnight.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Brushing teeth with tap running.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "question_title": "Which habit helps reduce waterborne diseases?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Boiling or treating water before drinking.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Drinking water from puddles.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Using the same water for cooking and washing without cleaning.",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "question_title": "How can governments support universal WASH by 2030?",
+            "answers": [
+                {
+                    "id": 1,
+                    "answer_text": "Funding infrastructure and education programmes.",
+                    "isCorrect": true
+                },
+                {
+                    "id": 2,
+                    "answer_text": "Cutting budgets for water projects.",
+                    "isCorrect": false
+                },
+                {
+                    "id": 3,
+                    "answer_text": "Stopping hygiene classes in schools.",
                     "isCorrect": false
                 }
             ]

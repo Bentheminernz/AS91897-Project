@@ -4,6 +4,7 @@ from Components.Button import Button
 from Components.Textfield import TextField
 from Utils.playerDataManagement import save_player_data
 from Scenes.HomeScene import HomeScene
+from Utils.loggerConfig import game_logger
 
 class IntroScene(Scene):
     def __init__(self, scene_manager, player_data):
@@ -38,6 +39,10 @@ class IntroScene(Scene):
         self.all_buttons.add(self.continue_button)
 
     def continue_action(self):
+        if not self.name_textfield.text:
+            game_logger.error("Player name is empty. Exiting.")
+            return
+
         self.player_data["player_name"] = self.name_textfield.text
         self.player_data["completed_intro"] = True
         save_player_data(self.player_data)
