@@ -11,6 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=position)
         self.speed = 350
         self.gravity_force = 0
+        self.jump_audio = pygame.mixer.Sound("./Assets/Audio/Jump_02.wav")
 
     # this is the function that updates the players movement
     def update(self, *args):
@@ -27,18 +28,17 @@ class Player(pygame.sprite.Sprite):
             direction.x -= 1
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             direction.x += 1
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            direction.y -= 1
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             direction.y += 1
         if (
-            keys[pygame.K_SPACE]
-            and is_jump == False
+            (keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w])
+            and not is_jump
             and self.rect.bottom >= screen.get_height()
         ):
             is_jump = True
             direction.y -= 1.0
             self.gravity_force = -self.speed
+            self.jump_audio.play()
 
         # normalises the players movement so diagonal movement is not faster
         if direction.length() > 0:

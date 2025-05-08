@@ -3,6 +3,7 @@ from Utils.SceneManager import Scene
 from Components.Button import Button
 from Components.Textfield import TextField
 from Scenes.GameScene import GameScene
+from Scenes.SettingsScene import SettingsScene
 
 class HomeScene(Scene):
     def __init__(self, scene_manager, player_data):
@@ -21,6 +22,16 @@ class HomeScene(Scene):
             button_action=self.start_game,
         )
         self.all_buttons.add(self.start_button)
+
+        self.settings_button = Button(
+            "Settings",
+            (400, 350),
+            font_size=30,
+            color=(255, 255, 255),
+            bg_color=(0, 0, 100),
+            button_action=lambda: self.scene_manager.set_scene(SettingsScene(self.scene_manager, self.player_data)),
+        )
+        self.all_buttons.add(self.settings_button)
 
         self.quit_button = Button(
             "Quit Game",
