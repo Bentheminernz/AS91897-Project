@@ -13,10 +13,24 @@ class HomeScene(Scene):
         self.all_textfields = pygame.sprite.Group()
         self.player_name = player_data.get("player_name", "Player")
 
+        self.window_size = pygame.display.get_surface().get_size()
+
+        self.create_ui()
+
+    def create_ui(self):
+        self.all_buttons.empty()
+        self.all_textfields.empty()
+
+        width, height = self.window_size
+
+        center_x = width // 2
+        start_y = height * 0.5
+        button_spacing = height * 0.08
+
         self.start_button = Button(
             "Start Game",
-            (400, 300),
-            font_size=30,
+            (center_x, start_y),
+            font_size=int(height * 0.06),
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
             button_action=self.start_game,
@@ -25,8 +39,8 @@ class HomeScene(Scene):
 
         self.settings_button = Button(
             "Settings",
-            (400, 350),
-            font_size=30,
+            (center_x, start_y + button_spacing),
+            font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(0, 0, 100),
             button_action=lambda: self.scene_manager.set_scene(SettingsScene(self.scene_manager, self.player_data)),
@@ -35,17 +49,19 @@ class HomeScene(Scene):
 
         self.quit_button = Button(
             "Quit Game",
-            (400, 400),
-            font_size=30,
+            (center_x, start_y + button_spacing * 2),
+            font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(100, 0, 0),
             button_action=self.scene_manager.quit_game,
         )
         self.all_buttons.add(self.quit_button)
-        
-        self.title_text = pygame.font.Font(None, 72).render(
+
+        title_font_size = int(height * 0.1)
+        self.title_text = pygame.font.Font(None, title_font_size).render(
             f"Welcome {self.player_name}", True, (255, 255, 255)
         )
+        self.title_pos = (center_x * 0.75, height * 0.15)
 
     def start_game(self):
         self.scene_manager.set_scene(GameScene(self.scene_manager, self.player_data))
@@ -65,9 +81,14 @@ class HomeScene(Scene):
         return True
     
     def update(self, delta_time):
+        current_size = pygame.display.get_surface().get_size()
+        if current_size != self.window_size:
+            self.window_size = current_size
+            self.create_ui()
+
         self.all_buttons.update()
 
     def render(self, screen):
         screen.fill((0, 0, 0))
-        screen.blit(self.title_text, (200, 100))
+        screen.blit(self.title_text, self.title_pos)
         self.all_buttons.draw(screen)

@@ -16,30 +16,50 @@ class SettingsScene(Scene):
         self.all_checkboxes = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()
 
-        self.font = pygame.font.Font(None, 36)
+        self.window_size = pygame.display.get_surface().get_size()
+        
+        self.create_ui()
+
+    def create_ui(self):
+        self.all_buttons.empty()
+        self.all_checkboxes.empty()
+        self.all_textfields.empty()
+        self.all_sprites.empty()
+
+        width, height = self.window_size
+
+        center_x = width // 2
+        start_y = height * 0.5
+        item_spacing = height * 0.08
+
+        self.font = pygame.font.Font(None, int(height * 0.05))
 
         self.name_textfield = TextField(
             self.font,
             self.player_data.get("player_name", ""),
             "Player Name",
-            (300, 280),
+            (center_x - 100, start_y - item_spacing),
             max_length=20,
         )
         self.all_textfields.add(self.name_textfield)
 
-        save_button = Button(
-            "Save Settings",
-            (400, 500),
-            font_size=30,
-            color=(255, 255, 255),
-            bg_color=(0, 100, 0),
-            button_action=self.save_settings,
+        sound_checkbox = Checkbox(
+            "Sound Effects",
+            (center_x, start_y + item_spacing),
+            size=20,
+            font_size=30,   
+            text_color=(255, 255, 255),
+            border_color=(255, 255, 255),
+            check_color=(0, 255, 0),
+            bg_color=(0, 0, 0),
+            initial_state=self.player_data.get("settings", {}).get("sound", False),
+            on_toggle=self.toggle_sound,
         )
-        self.all_buttons.add(save_button)
+        self.all_checkboxes.add(sound_checkbox)
 
         music_checkbox = Checkbox(
             "Music",
-            (400, 200),
+            (center_x, start_y + item_spacing * 2),
             size=20,
             font_size=30,
             text_color=(255, 255, 255),
@@ -51,19 +71,21 @@ class SettingsScene(Scene):
         )
         self.all_checkboxes.add(music_checkbox)
 
-        sound_checkbox = Checkbox(
-            "Sound Effects",
-            (400, 250),
-            size=20,
-            font_size=30,   
-            text_color=(255, 255, 255),
-            border_color=(255, 255, 255),
-            check_color=(0, 255, 0),
-            bg_color=(0, 0, 0),
-            initial_state=self.player_data.get("settings", {}).get("sound", False),
-            on_toggle=self.toggle_sound,
+        save_button = Button(
+            "Save Settings",
+            (center_x, start_y + item_spacing * 4),
+            font_size=30,
+            color=(255, 255, 255),
+            bg_color=(0, 100, 0),
+            button_action=self.save_settings,
         )
-        self.all_checkboxes.add(sound_checkbox)
+        self.all_buttons.add(save_button)
+
+        title_font_size = int(height * 0.1)
+        self.title_text = pygame.font.Font(None, title_font_size).render(
+            "Settings", True, (255, 255, 255)
+        )
+        self.title_pos = (center_x * 0.75, height * 0.15)
 
     def toggle_sound(self, is_checked):
         if "settings" not in self.player_data:
@@ -101,6 +123,11 @@ class SettingsScene(Scene):
         return True
     
     def update(self, delta_time):
+        current_size = pygame.display.get_surface().get_size()
+        if current_size != self.window_size:
+            self.window_size = current_size
+            self.create_ui()
+
         self.all_buttons.update()
         self.all_checkboxes.update()
         self.all_textfields.update()
@@ -108,9 +135,7 @@ class SettingsScene(Scene):
     def render(self, screen):
         screen.fill((0, 0, 0))
 
-        title_text = pygame.font.Font(None, 72).render("Settings", True, (255, 255, 255))
-        title_rect = title_text.get_rect(center=(400, 100))
-        screen.blit(title_text, title_rect)
+        screen.blit(self.title_text, self.title_pos)
 
         self.all_buttons.draw(screen)
         self.all_checkboxes.draw(screen)

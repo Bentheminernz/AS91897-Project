@@ -21,9 +21,9 @@ has_completed_intro = player_data.get("completed_intro", False)
 pygame.init()
 
 # define screen size, creates the window and makes sprite group
-screen_width = 800
+screen_width = 1200
 screen_height = 600
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption(f"2.6 Platformer - Based upon build: {build_number} ({commit_id})")
 
 scene_manager = SceneManager(screen)
