@@ -1,0 +1,117 @@
+import pygame
+from Components.Button import Button
+from Components.Textfield import TextField
+from Components.Checkbox import Checkbox
+from Utils.SceneManager import Scene
+from Utils.loggerConfig import utils_logger
+from Utils import playerDataManagement
+
+class SettingsScene(Scene):
+    def __init__(self, scene_manager, player_data):
+        self.scene_manager = scene_manager
+        self.player_data = player_data
+
+        self.all_sprites = pygame.sprite.Group()
+        self.all_buttons = pygame.sprite.Group()
+        self.all_checkboxes = pygame.sprite.Group()
+        self.all_textfields = pygame.sprite.Group()
+
+        self.font = pygame.font.Font(None, 36)
+
+        self.name_textfield = TextField(
+            self.font,
+            self.player_data.get("player_name", ""),
+            "Player Name",
+            (300, 280),
+            max_length=20,
+        )
+        self.all_textfields.add(self.name_textfield)
+
+        save_button = Button(
+            "Save Settings",
+            (400, 500),
+            font_size=30,
+            color=(255, 255, 255),
+            bg_color=(0, 100, 0),
+            button_action=self.save_settings,
+        )
+        self.all_buttons.add(save_button)
+
+        music_checkbox = Checkbox(
+            "Music",
+            (400, 200),
+            size=20,
+            font_size=30,
+            text_color=(255, 255, 255),
+            border_color=(255, 255, 255),
+            check_color=(0, 255, 0),
+            bg_color=(0, 0, 0),
+            initial_state=self.player_data.get("settings", {}).get("music", False),
+            on_toggle=self.toggle_music,
+        )
+        self.all_checkboxes.add(music_checkbox)
+
+        sound_checkbox = Checkbox(
+            "Sound Effects",
+            (400, 250),
+            size=20,
+            font_size=30,   
+            text_color=(255, 255, 255),
+            border_color=(255, 255, 255),
+            check_color=(0, 255, 0),
+            bg_color=(0, 0, 0),
+            initial_state=self.player_data.get("settings", {}).get("sound", False),
+            on_toggle=self.toggle_sound,
+        )
+        self.all_checkboxes.add(sound_checkbox)
+
+    def toggle_sound(self, is_checked):
+        if "settings" not in self.player_data:
+            self.player_data["settings"] = {}
+        self.player_data["settings"]["sound"] = is_checked
+        utils_logger.info(f"Sound setting changed to: {is_checked}")
+    
+    def toggle_music(self, is_checked):
+        if "settings" not in self.player_data:
+            self.player_data["settings"] = {}
+        self.player_data["settings"]["music"] = is_checked
+        utils_logger.info(f"Music setting changed to: {is_checked}")
+
+    def save_settings(self):
+        from Scenes.HomeScene import HomeScene
+        self.player_data["player_name"] = self.name_textfield.text
+        playerDataManagement.save_player_data(self.player_data)
+        utils_logger.info("Settings saved successfully.")
+        self.scene_manager.set_scene(HomeScene(self.scene_manager, self.player_data))
+
+    def handle_events(self, events):
+        for event in events:
+            for button in self.all_buttons:
+                if hasattr(button, "handle_event"):
+                    button.handle_event(event)
+
+            for checkbox in self.all_checkboxes:
+                if hasattr(checkbox, "handle_event"):
+                    checkbox.handle_event(event)
+
+            for textfield in self.all_textfields:
+                if hasattr(textfield, "handle_event"):
+                    textfield.handle_event(event)
+
+        return True
+    
+    def update(self, delta_time):
+        self.all_buttons.update()
+        self.all_checkboxes.update()
+        self.all_textfields.update()
+
+    def render(self, screen):
+        screen.fill((0, 0, 0))
+
+        title_text = pygame.font.Font(None, 72).render("Settings", True, (255, 255, 255))
+        title_rect = title_text.get_rect(center=(400, 100))
+        screen.blit(title_text, title_rect)
+
+        self.all_buttons.draw(screen)
+        self.all_checkboxes.draw(screen)
+        self.all_textfields.draw(screen)

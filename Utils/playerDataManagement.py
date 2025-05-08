@@ -10,22 +10,36 @@ default_player_data = {
     "completed_questions": [],
     "current_question": None,
     "completed_intro": False,
+    "settings": {
+        "sound": True,
+        "music": True,
+    }
 }
 
 def validate_player_data(player_data):
     save_logger.info("Validating player data...")
-    required_keys = [
+    # Check top-level keys
+    required_top_keys = [
         "id",
         "player_name",
         "score",
         "completed_questions",
         "current_question",
         "completed_intro",
+        "settings",
     ]
 
-    for key in required_keys:
+    for key in required_top_keys:
         if key not in player_data:
             save_logger.error(f"Missing key: {key}")
+            return False
+    
+    if "settings" in player_data:
+        if "sound" not in player_data["settings"]:
+            save_logger.error("Missing key: settings.sound")
+            return False
+        if "music" not in player_data["settings"]:
+            save_logger.error("Missing key: settings.music")
             return False
 
     if not isinstance(player_data["id"], str):
@@ -50,6 +64,10 @@ def validate_player_data(player_data):
 
     if not isinstance(player_data["completed_intro"], bool):
         save_logger.error("Completed intro must be a boolean.")
+        return False
+    
+    if not isinstance(player_data["settings"], dict):
+        save_logger.error("Settings must be a dictionary.")
         return False
 
     save_logger.info("Player data validation successful.")
