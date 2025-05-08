@@ -14,8 +14,13 @@ class GameScene(Scene):
         self.player_data = player_data
         self.completed_questions = player_data.get("completed_questions", [])
         self.has_completed_all_questions = False
+
+        self.window_size = pygame.display.get_surface().get_size()
         
-        # Add a flag to track initial load
+        # Initialize the font here, before using it
+        height = self.window_size[1]
+        self.font = pygame.font.Font(None, int(height * 0.05))
+        
         self.is_first_load = True
 
         self.all_sprites = pygame.sprite.Group()
@@ -35,14 +40,35 @@ class GameScene(Scene):
         )
         self.all_buttons.add(self.save_button)
 
-        self.font = pygame.font.Font(None, 36)
+        self.load_new_question(use_current=self.is_first_load)
+        self.is_first_load = False
+
+    def create_ui(self):
+        self.all_buttons.empty()
+        self.all_sprites.empty()
+
+        width, height = self.window_size
+
+        center_x = width // 2
+        start_y = height * 0.5
+        button_spacing = height * 0.08
+
+        self.font = pygame.font.Font(None, int(height * 0.05))
+
+        self.save_button = Button(
+            "Save Game",
+            (60, 580),
+            font_size=30,
+            color=(255, 255, 255),
+            bg_color=(0, 100, 0),
+            button_action=lambda: playerDataManagement.save_player_data(self.player_data),
+        )
+        self.all_buttons.add(self.save_button)
 
         self.player_score = self.font.render(
             f"Score: {self.player_data['score']}", True, (255, 255, 255)
         )
-
-        self.load_new_question(use_current=self.is_first_load)
-        self.is_first_load = False
+        self.player_score_rect = self.player_score.get_rect(topleft=(10, 10))
 
     def load_new_question(self, use_current=False):
         for block in self.question_blocks:
@@ -122,6 +148,11 @@ class GameScene(Scene):
         return True
     
     def update(self, delta_time):
+        current_size = pygame.display.get_surface().get_size()
+        if current_size != self.window_size:
+            self.window_size = current_size
+            self.create_ui()
+
         self.player.gravity(delta_time, self.scene_manager.screen)
 
         for block in self.question_blocks:
@@ -135,5 +166,5 @@ class GameScene(Scene):
         
         self.all_sprites.draw(screen)
         self.all_buttons.draw(screen)
-        screen.blit(self.player_score, (650, 10))
+        screen.blit(self.player_score, self.player_score_rect)
         screen.blit(self.question_surface, (10, 10))
