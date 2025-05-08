@@ -14,6 +14,9 @@ class GameScene(Scene):
         self.player_data = player_data
         self.completed_questions = player_data.get("completed_questions", [])
         self.has_completed_all_questions = False
+        
+        # Add a flag to track initial load
+        self.is_first_load = True
 
         self.all_sprites = pygame.sprite.Group()
         self.all_buttons = pygame.sprite.Group()
@@ -38,9 +41,10 @@ class GameScene(Scene):
             f"Score: {self.player_data['score']}", True, (255, 255, 255)
         )
 
-        self.load_new_question()
+        self.load_new_question(use_current=self.is_first_load)
+        self.is_first_load = False
 
-    def load_new_question(self):
+    def load_new_question(self, use_current=False):
         for block in self.question_blocks:
             self.all_sprites.remove(block)
         self.question_blocks.clear()
@@ -51,20 +55,19 @@ class GameScene(Scene):
         max_attempts = 10
         random_question = None
 
+        if use_current and self.player_data.get("current_question") is not None:
+            game_logger.info(f"Loading existing question: {self.player_data['current_question']}")
+            random_question = load_specific_question(
+                self.player_data["current_question"]
+            )
+        else:
+            while attempts < max_attempts:
+                random_question = fetch_random_question()
+                question_id = random_question.get("id", "No question ID found")
 
-        while attempts < max_attempts:
-            if self.player_data.get("current_question") is not None:
-                random_question = load_specific_question(
-                    self.player_data["current_question"]
-                )
-                break
-
-            random_question = fetch_random_question()
-            question_id = random_question.get("id", "No question ID found")
-
-            if question_id not in self.completed_questions:
-                break
-            attempts += 1
+                if question_id not in self.completed_questions:
+                    break
+                attempts += 1
 
         if attempts >= max_attempts:
             self.has_completed_all_questions = True
@@ -73,14 +76,17 @@ class GameScene(Scene):
                 self.question_text, True, (255, 255, 255)
             )
             game_logger.info("All questions completed.")
+            self.player_data["current_question"] = None
+            playerDataManagement.save_player_data(self.player_data)
             return
         
         self.question_text = random_question.get("question_title", "No question found")
         question_id = random_question.get("id", "No question ID found")
         answers = random_question.get("answers", ["No answers found"])
 
-        self.player_data["current_question"] = question_id
-        playerDataManagement.save_player_data(self.player_data)
+        if not use_current:
+            self.player_data["current_question"] = question_id
+            playerDataManagement.save_player_data(self.player_data)
 
         self.question_surface = self.font.render(
             self.question_text, True, (255, 255, 255)
