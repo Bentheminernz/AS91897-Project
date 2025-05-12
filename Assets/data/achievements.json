@@ -1,0 +1,32 @@
+{
+    "achievements": [
+        {
+            "id": 1,
+            "name": "First Steps",
+            "description": "Complete the tutorial.",
+            "trophy": "bronze",
+            "points": 10
+        },
+        {
+            "id": 2,
+            "name": "Water Warrior",
+            "description": "Answer 10 questions correctly.",
+            "trophy": "silver",
+            "points": 20
+        },
+        {
+            "id": 3,
+            "name": "Eco Champion",
+            "description": "Complete all questions in the game.",
+            "trophy": "gold",
+            "points": 30
+        },
+        {
+            "id": 4,
+            "name": "Quiz Master",
+            "description": "Achieve a score of 100% on any quiz.",
+            "trophy": "platinum",
+            "points": 50
+        }
+    ]
+}

@@ -30,22 +30,22 @@ class GameScene(Scene):
         self.player = Player("./Assets/Players/Player1.png", (650, 650))
         self.all_sprites.add(self.player)
 
-        self.save_button = Button(
-            "Save Game",
-            (60, 580),
-            font_size=30,
-            color=(255, 255, 255),
-            bg_color=(0, 100, 0),
-            button_action=lambda: playerDataManagement.save_player_data(self.player_data),
-        )
-        self.all_buttons.add(self.save_button)
-
         self.load_new_question(use_current=self.is_first_load)
         self.is_first_load = False
 
+        self.create_ui()
+
     def create_ui(self):
         self.all_buttons.empty()
+
+        important_sprites = []
+        for sprite in self.all_sprites:
+            if isinstance(sprite, Player) or isinstance(sprite, QuestionBlock):
+                important_sprites.append(sprite)
+
         self.all_sprites.empty()
+        for sprite in important_sprites:
+            self.all_sprites.add(sprite)
 
         width, height = self.window_size
 
@@ -57,7 +57,7 @@ class GameScene(Scene):
 
         self.save_button = Button(
             "Save Game",
-            (60, 580),
+            (center_x * 2 - 75, start_y * 2 - 25),
             font_size=30,
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
@@ -68,7 +68,7 @@ class GameScene(Scene):
         self.player_score = self.font.render(
             f"Score: {self.player_data['score']}", True, (255, 255, 255)
         )
-        self.player_score_rect = self.player_score.get_rect(topleft=(10, 10))
+        self.player_score_rect = self.player_score.get_rect(topright=(width - 10, 10))
 
     def load_new_question(self, use_current=False):
         for block in self.question_blocks:

@@ -2,6 +2,7 @@ import os
 import json
 from Utils.loggerConfig import save_logger
 import uuid
+import requests
 
 default_player_data = {
     "id": str(uuid.uuid4()),
@@ -13,7 +14,8 @@ default_player_data = {
     "settings": {
         "sound": True,
         "music": True,
-    }
+    },
+    "achievements": []
 }
 
 def validate_player_data(player_data):
@@ -27,6 +29,7 @@ def validate_player_data(player_data):
         "current_question",
         "completed_intro",
         "settings",
+        "achievements",
     ]
 
     for key in required_top_keys:
@@ -69,6 +72,10 @@ def validate_player_data(player_data):
     if not isinstance(player_data["settings"], dict):
         save_logger.error("Settings must be a dictionary.")
         return False
+    
+    if not isinstance(player_data["achievements"], list):
+        save_logger.error("Achievements must be a list.")
+        return False
 
     save_logger.info("Player data validation successful.")
     return True
@@ -91,7 +98,7 @@ def save_player_data(player_data):
 
         save_logger.info(f"Writing player data: {player_data}")
         json.dump(player_data, f, indent=4)
-
+        
 def load_player_data():
     save_logger.info("Loading player data...")
     if os.path.exists("./SaveData/player_data.json"):
