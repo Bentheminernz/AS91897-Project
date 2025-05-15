@@ -5,14 +5,14 @@ from Components.Button import Button
 from Components.QuestionBlock import QuestionBlock
 from Utils.SceneManager import Scene
 from Utils.fetchRandomQuestion import fetch_random_question, load_specific_question
-from Utils import playerDataManagement
+from Utils import PlayerDataContext
 from Utils.loggerConfig import game_logger
 
 class GameScene(Scene):
-    def __init__(self, scene_manager, player_data):
+    def __init__(self, scene_manager):
         self.scene_manager = scene_manager
-        self.player_data = player_data
-        self.completed_questions = player_data.get("completed_questions", [])
+        self.player_data = PlayerDataContext.get_data()
+        self.completed_questions = self.player_data.get("completed_questions", [])
         self.has_completed_all_questions = False
 
         self.window_size = pygame.display.get_surface().get_size()
@@ -61,7 +61,7 @@ class GameScene(Scene):
             font_size=30,
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
-            button_action=lambda: playerDataManagement.save_player_data(self.player_data),
+            button_action=lambda: PlayerDataContext.update_data(self.player_data),
         )
         self.all_buttons.add(self.save_button)
 
@@ -103,7 +103,7 @@ class GameScene(Scene):
             )
             game_logger.info("All questions completed.")
             self.player_data["current_question"] = None
-            playerDataManagement.save_player_data(self.player_data)
+            PlayerDataContext.update_data(self.player_data)
             return
         
         self.question_text = random_question.get("question_title", "No question found")
@@ -112,7 +112,7 @@ class GameScene(Scene):
 
         if not use_current:
             self.player_data["current_question"] = question_id
-            playerDataManagement.save_player_data(self.player_data)
+            PlayerDataContext.update_data(self.player_data)
 
         self.question_surface = self.font.render(
             self.question_text, True, (255, 255, 255)
@@ -143,7 +143,7 @@ class GameScene(Scene):
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.QUIT:
-                playerDataManagement.save_player_data(self.player_data)
+                PlayerDataContext.update_data(self.player_data)
                 return False
         return True
     

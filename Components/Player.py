@@ -1,4 +1,5 @@
 import pygame
+from Utils import PlayerDataContext
 
 # this is the player class, it inherits from the pygame sprite class, so it can be used in sprite groups
 # it has an image, a rect, a speed and a gravity force
@@ -11,7 +12,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=position)
         self.speed = 350
         self.gravity_force = 0
-        self.jump_audio = pygame.mixer.Sound("./Assets/Audio/Jump_02.wav")
+        self.jump_audio = pygame.mixer.Sound("./Assets/Audio/Jump.ogg")
+        self.jump_audio.set_volume(1.0 if PlayerDataContext.is_sound_enabled() else 0.0)
 
     # this is the function that updates the players movement
     def update(self, *args):

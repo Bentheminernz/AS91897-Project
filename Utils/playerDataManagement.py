@@ -3,6 +3,8 @@ import json
 from Utils.loggerConfig import save_logger
 import uuid
 import requests
+import hashlib
+import time
 
 default_player_data = {
     "id": str(uuid.uuid4()),
@@ -20,7 +22,6 @@ default_player_data = {
 
 def validate_player_data(player_data):
     save_logger.info("Validating player data...")
-    # Check top-level keys
     required_top_keys = [
         "id",
         "player_name",
@@ -80,47 +81,111 @@ def validate_player_data(player_data):
     save_logger.info("Player data validation successful.")
     return True
 
+def calculate_checksum(player_data):
+    serialized = json.dumps(player_data, sort_keys=True)
+    return hashlib.sha256(serialized.encode()).hexdigest()
+
 def save_player_data(player_data):
     save_logger.info("Saving player data...")
-    if not os.path.exists("./SaveData/player_data.json"):
+    if not os.path.exists("./SaveData"):
         save_logger.info("Creating SaveData directory...")
         os.makedirs("./SaveData", exist_ok=True)
 
-    with open("./SaveData/player_data.json", "w") as f:
-        save_logger.info("Writing player data to JSON file...")
-        try:
-            if not validate_player_data(player_data):
-                save_logger.error("Player data validation failed. Saving default data.")
-                player_data = default_player_data
-        except Exception as e:
-            save_logger.error(f"Error during validation: {e}")
+    try:
+        if not validate_player_data(player_data):
+            save_logger.error("Player data validation failed. Saving default data.")
             player_data = default_player_data
 
-        save_logger.info(f"Writing player data: {player_data}")
-        json.dump(player_data, f, indent=4)
+        save_wrapper = {
+            "data": player_data,
+            "metadata": {
+                "timestamp": time.time(),
+                "game_version": "1.0.0",
+            }
+        }
+        
+        save_wrapper["checksum"] = calculate_checksum(player_data)
+        
+        with open("./SaveData/player_data.json", "w") as f:
+            save_logger.info("Writing player data to JSON file...")
+            json.dump(save_wrapper, f, indent=4)
+            
+        with open("./SaveData/player_data_backup.json", "w") as f:
+            json.dump(save_wrapper, f, indent=4)
+            
+    except Exception as e:
+        save_logger.error(f"Error saving player data: {e}")
+        save_wrapper = {
+            "data": default_player_data,
+            "metadata": {
+                "timestamp": time.time(),
+                "game_version": "1.0.0",
+            },
+            "checksum": calculate_checksum(default_player_data)
+        }
+        with open("./SaveData/player_data.json", "w") as f:
+            json.dump(save_wrapper, f, indent=4)
         
 def load_player_data():
     save_logger.info("Loading player data...")
-    if os.path.exists("./SaveData/player_data.json"):
+    player_data_file = "./SaveData/player_data.json"
+    backup_file = "./SaveData/player_data_backup.json"
+    
+    main_data = None
+    if os.path.exists(player_data_file):
         save_logger.info("Player data file found.")
-        with open("./SaveData/player_data.json", "r") as f:
-            save_logger.info("Reading player data from JSON file...")
-            try:
-                player_data = json.load(f)
-                save_logger.info("Player data loaded successfully.")
-                if not validate_player_data(player_data):
-                    save_logger.error("Player data validation failed. Creating new player data.")
-                    save_player_data(default_player_data)
-                    return default_player_data
-                return player_data
-            except json.JSONDecodeError as e:
-                save_logger.error(f"Error decoding JSON: {e}")
-                player_data = default_player_data
-                save_player_data(player_data)
-                return player_data
+        try:
+            with open(player_data_file, "r") as f:
+                save_logger.info("Reading player data from JSON file...")
+                file_content = json.load(f)
+                
+                if isinstance(file_content, dict) and "data" in file_content and "checksum" in file_content:
+                    player_data = file_content["data"]
+                    stored_checksum = file_content["checksum"]
+                    
+                    calculated_checksum = calculate_checksum(player_data)
+                    if calculated_checksum != stored_checksum:
+                        save_logger.error("Checksum verification failed! Save file may have been tampered with.")
+                        main_data = None
+                    else:
+                        if validate_player_data(player_data):
+                            main_data = player_data
+                else:
+                    save_logger.warning("Loading legacy save format")
+                    if validate_player_data(file_content):
+                        main_data = file_content
+        except Exception as e:
+            save_logger.error(f"Error loading main save file: {e}")
+    
+    if main_data is None and os.path.exists(backup_file):
+        save_logger.info("Trying backup save file...")
+        try:
+            with open(backup_file, "r") as f:
+                file_content = json.load(f)
+                if isinstance(file_content, dict) and "data" in file_content and "checksum" in file_content:
+                    player_data = file_content["data"]
+                    stored_checksum = file_content["checksum"]
+                    
+                    if calculate_checksum(player_data) == stored_checksum and validate_player_data(player_data):
+                        main_data = player_data
+                        save_logger.info("Restored from backup save file")
+        except Exception as e:
+            save_logger.error(f"Error loading backup save file: {e}")
+    
+    if main_data is None:
+        save_logger.info("Using default player data")
+        main_data = default_player_data
+        save_player_data(main_data)
+        
+    return main_data
+    
+def delete_player_data():
+    save_logger.info("Deleting player data...")
+    if os.path.exists("./SaveData/player_data.json"):
+        os.remove("./SaveData/player_data.json")
+        save_logger.info("Player data file deleted.")
+    if os.path.exists("./SaveData/player_data_backup.json"):
+        os.remove("./SaveData/player_data_backup.json")
+        save_logger.info("Player data backup file deleted.")
     else:
-        save_logger.info("No player data file found.")
-
-        save_player_data(default_player_data)
-
-        return default_player_data
+        save_logger.info("No player data files found to delete.")

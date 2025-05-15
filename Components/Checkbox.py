@@ -1,4 +1,5 @@
 import pygame
+from Utils import PlayerDataContext
 
 # this is a custom checkbox class that is used to create checkboxes in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
@@ -30,6 +31,9 @@ class Checkbox(pygame.sprite.Sprite):
         self.is_checked = initial_state
         self.on_toggle = on_toggle
         self.font = pygame.font.Font(None, font_size)
+        self.sound_enabled = PlayerDataContext.is_sound_enabled()
+        self.button_sound = pygame.mixer.Sound("Assets/Audio/SelectSound.wav")
+        self.button_sound.set_volume(1.0 if self.sound_enabled else 0.0)
         
         # Create the initial surface and rect
         self.update_image()
@@ -85,6 +89,7 @@ class Checkbox(pygame.sprite.Sprite):
             if self.rect.collidepoint(event.pos) and self.is_pressed:
                 self.toggle()
                 self.is_pressed = False
+                self.button_sound.play()
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
                 self.is_pressed = True

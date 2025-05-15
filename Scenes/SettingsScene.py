@@ -4,12 +4,13 @@ from Components.Textfield import TextField
 from Components.Checkbox import Checkbox
 from Utils.SceneManager import Scene
 from Utils.loggerConfig import utils_logger
+from Utils import PlayerDataContext
 from Utils import playerDataManagement
 
 class SettingsScene(Scene):
-    def __init__(self, scene_manager, player_data):
+    def __init__(self, scene_manager):
         self.scene_manager = scene_manager
-        self.player_data = player_data
+        self.player_data = PlayerDataContext.get_data()
 
         self.all_sprites = pygame.sprite.Group()
         self.all_buttons = pygame.sprite.Group()
@@ -71,9 +72,19 @@ class SettingsScene(Scene):
         )
         self.all_checkboxes.add(music_checkbox)
 
+        reset_button = Button(
+            "Reset Game",
+            (center_x, start_y + item_spacing * 3),
+            font_size=30,
+            color=(255, 255, 255),
+            bg_color=(255, 0, 0),
+            button_action=self.reset_game,
+        )
+        self.all_buttons.add(reset_button)
+
         save_button = Button(
-            "Save Settings",
-            (center_x, start_y + item_spacing * 4),
+            "Return to Home and Save",
+            (center_x, start_y + item_spacing * 5),
             font_size=30,
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
@@ -102,9 +113,13 @@ class SettingsScene(Scene):
     def save_settings(self):
         from Scenes.HomeScene import HomeScene
         self.player_data["player_name"] = self.name_textfield.text
-        playerDataManagement.save_player_data(self.player_data)
+        PlayerDataContext.update_data(self.player_data)
         utils_logger.info("Settings saved successfully.")
-        self.scene_manager.set_scene(HomeScene(self.scene_manager, self.player_data))
+        self.scene_manager.set_scene(HomeScene(self.scene_manager))
+
+    def reset_game(self):
+        playerDataManagement.delete_player_data()
+        exit(0)
 
     def handle_events(self, events):
         for event in events:
