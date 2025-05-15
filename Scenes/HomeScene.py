@@ -1,17 +1,18 @@
 import pygame
 from Utils.SceneManager import Scene
 from Components.Button import Button
-from Components.Textfield import TextField
+from Components.VerticalGradient import VerticalGradient
 from Scenes.GameScene import GameScene
 from Scenes.SettingsScene import SettingsScene
+from Utils import PlayerDataContext
 
 class HomeScene(Scene):
-    def __init__(self, scene_manager, player_data):
+    def __init__(self, scene_manager):
         self.scene_manager = scene_manager
-        self.player_data = player_data
+        self.player_data = PlayerDataContext.get_data()
         self.all_buttons = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()
-        self.player_name = player_data.get("player_name", "Player")
+        self.player_name = PlayerDataContext.get_player_name()
 
         self.window_size = pygame.display.get_surface().get_size()
 
@@ -28,7 +29,7 @@ class HomeScene(Scene):
         button_spacing = height * 0.08
 
         self.start_button = Button(
-            "Start Game",
+            "Start Game" if self.player_data.get("score", 0) == 0 else "Continue",
             (center_x, start_y),
             font_size=int(height * 0.06),
             color=(255, 255, 255),
@@ -43,7 +44,7 @@ class HomeScene(Scene):
             font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(0, 0, 100),
-            button_action=lambda: self.scene_manager.set_scene(SettingsScene(self.scene_manager, self.player_data)),
+            button_action=lambda: self.scene_manager.set_scene(SettingsScene(self.scene_manager)),
         )
         self.all_buttons.add(self.settings_button)
 
@@ -63,8 +64,12 @@ class HomeScene(Scene):
         )
         self.title_pos = (center_x * 0.75, height * 0.15)
 
+        self.gradient = VerticalGradient(
+            (0, 0, 0), (0, 0, 100), width, height
+        )
+
     def start_game(self):
-        self.scene_manager.set_scene(GameScene(self.scene_manager, self.player_data))
+        self.scene_manager.set_scene(GameScene(self.scene_manager))
 
     def handle_events(self, events):
         for event in events:
@@ -90,5 +95,6 @@ class HomeScene(Scene):
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.gradient.gradient_surface, (0, 0))
         screen.blit(self.title_text, self.title_pos)
         self.all_buttons.draw(screen)

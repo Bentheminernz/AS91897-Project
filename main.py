@@ -6,6 +6,7 @@ from Utils.fetchGitCommitCount import fetch_git_commit_count
 from Utils.fetchRandomQuestion import fetch_random_question
 from Utils.fetchGitCommitID import fetch_git_commit_id
 from Utils import playerDataManagement
+from Utils import PlayerDataContext
 
 # defines some variables, based on functions from my utils.
 # build number based on commits in my repo
@@ -14,8 +15,9 @@ from Utils import playerDataManagement
 build_number = fetch_git_commit_count()
 commit_id = fetch_git_commit_id()
 
-global player_data
-player_data = playerDataManagement.load_player_data()
+PlayerDataContext.initialize()
+
+player_data = PlayerDataContext.get_data()
 has_completed_intro = player_data.get("completed_intro", False)
 
 pygame.init()
@@ -28,9 +30,9 @@ pygame.display.set_caption(f"2.6 Platformer - Based upon build: {build_number} (
 
 scene_manager = SceneManager(screen)
 if not has_completed_intro:
-    scene_manager.set_scene(IntroScene(scene_manager, player_data))
+    scene_manager.set_scene(IntroScene(scene_manager))
 else:
-    scene_manager.set_scene(HomeScene(scene_manager, player_data))
+    scene_manager.set_scene(HomeScene(scene_manager))
 
 running = True
 clock = pygame.time.Clock()

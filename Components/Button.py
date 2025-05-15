@@ -1,4 +1,5 @@
 import pygame
+from Utils import PlayerDataContext
 
 # this is a custom button class that is used to create buttons in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
@@ -25,7 +26,10 @@ class Button(pygame.sprite.Sprite):
         self.original_image = self.image.copy()
         self.original_rect = self.rect.copy()
         self.button_action = button_action
-        self.is_pressed = False  # Track if button is currently pressed
+        self.is_pressed = False
+        self.sound_enabled = PlayerDataContext.is_sound_enabled()
+        self.button_sound = pygame.mixer.Sound("Assets/Audio/SelectSound.wav")
+        self.button_sound.set_volume(1.0 if self.sound_enabled else 0.0)
 
     # this function is called when the button is clicked
     # it checks if a button action is present, and if so, it calls it
@@ -56,6 +60,7 @@ class Button(pygame.sprite.Sprite):
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if self.rect.collidepoint(event.pos) and self.is_pressed:
                 self.perform_action()
+                self.button_sound.play()
                 self.is_pressed = False
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):

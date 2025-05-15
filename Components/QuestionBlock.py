@@ -1,5 +1,6 @@
 import pygame
 from Utils.loggerConfig import component_logger
+from Utils import PlayerDataContext
 
 # this is a custom question block class that is used to create question blocks in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
@@ -18,6 +19,11 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.player_data = player_data
         self.on_correct_answer = on_correct_answer
         self.question_id = question_id
+        self.correct_audio = pygame.mixer.Sound("./Assets/Audio/Correct.wav")
+        self.incorrect_audio = pygame.mixer.Sound("./Assets/Audio/Incorrect.wav")
+        self.audio_volume = 1.0 if PlayerDataContext.is_sound_enabled() else 0.0
+        self.correct_audio.set_volume(self.audio_volume)
+        self.incorrect_audio.set_volume(self.audio_volume)
 
         self.image = self.original_image.copy()
         font = pygame.font.Font(None, 18)
@@ -39,8 +45,14 @@ class QuestionBlock(pygame.sprite.Sprite):
                 self.player_data["score"] += 1
                 self.player_data["completed_questions"].append(self.question_id)
 
+                self.correct_audio.play()
+
                 if self.on_correct_answer:
                     self.on_correct_answer()
+
+            else:
+                component_logger.info("Incorrect answer!")
+                self.incorrect_audio.play()
 
             self.is_killed = True
             self.kill()

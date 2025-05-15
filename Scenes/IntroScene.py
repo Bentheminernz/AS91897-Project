@@ -2,14 +2,14 @@ import pygame
 from Utils.SceneManager import Scene
 from Components.Button import Button
 from Components.Textfield import TextField
-from Utils.playerDataManagement import save_player_data
 from Scenes.HomeScene import HomeScene
 from Utils.loggerConfig import game_logger
+from Utils import PlayerDataContext
 
 class IntroScene(Scene):
-    def __init__(self, scene_manager, player_data):
+    def __init__(self, scene_manager):
         self.scene_manager = scene_manager
-        self.player_data = player_data
+        self.player_data = PlayerDataContext.get_data()
         
         self.all_buttons = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()
@@ -45,8 +45,8 @@ class IntroScene(Scene):
 
         self.player_data["player_name"] = self.name_textfield.text
         self.player_data["completed_intro"] = True
-        save_player_data(self.player_data)
-        self.scene_manager.set_scene(HomeScene(self.scene_manager, self.player_data))
+        PlayerDataContext.update_data(self.player_data)
+        self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
     def handle_events(self, events):
         for event in events:
