@@ -170,10 +170,6 @@ class GameScene(Scene):
 
         width, height = self.window_size
 
-        center_x = width // 2
-        start_y = height * 0.5
-        button_spacing = height * 0.08
-
         self.font = pygame.font.Font(None, int(height * 0.05))
 
         self.player_score = self.font.render(
@@ -210,6 +206,7 @@ class GameScene(Scene):
 
             for block in self.question_blocks:
                 block.on_collision(self.player)
+                self.player_data = PlayerDataContext.get_data()
 
             self.all_sprites.update(self.scene_manager.screen, delta_time)
             self.all_buttons.update()

@@ -10,8 +10,7 @@ from Utils import PlayerDataContext
 
 # defines some variables, based on functions from my utils.
 # build number based on commits in my repo
-# commit id based on the last commit in my repo
-# random question from `./Assets/data/questions.json`
+# commit id based on the last commit ID in my repo
 build_number = fetch_git_commit_count()
 commit_id = fetch_git_commit_id()
 
