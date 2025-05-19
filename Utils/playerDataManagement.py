@@ -17,7 +17,9 @@ default_player_data = {
         "sound": True,
         "music": True,
     },
-    "achievements": []
+    "achievements": [
+        1
+    ]
 }
 
 def validate_player_data(player_data):

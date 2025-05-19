@@ -4,6 +4,7 @@ from Components.Button import Button
 from Components.VerticalGradient import VerticalGradient
 from Scenes.GameScene import GameScene
 from Scenes.SettingsScene import SettingsScene
+from Scenes.AchievementsScene import AchievementsScene
 from Utils import PlayerDataContext
 
 class HomeScene(Scene):
@@ -48,9 +49,19 @@ class HomeScene(Scene):
         )
         self.all_buttons.add(self.settings_button)
 
+        self.achievements_button = Button(
+            "Achievements",
+            (center_x, start_y + button_spacing * 2),
+            font_size=int(height * 0.05),
+            color=(255, 255, 255),
+            bg_color=(100, 100, 0),
+            button_action=lambda: self.scene_manager.set_scene(AchievementsScene(self.scene_manager)),
+        )
+        self.all_buttons.add(self.achievements_button)
+
         self.quit_button = Button(
             "Quit Game",
-            (center_x, start_y + button_spacing * 2),
+            (center_x, start_y + button_spacing * 3),
             font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(100, 0, 0),
