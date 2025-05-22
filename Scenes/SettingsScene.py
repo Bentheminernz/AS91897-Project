@@ -135,6 +135,11 @@ class SettingsScene(Scene):
                 if hasattr(textfield, "handle_event"):
                     textfield.handle_event(event)
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    from Scenes.HomeScene import HomeScene
+                    self.scene_manager.set_scene(HomeScene(self.scene_manager))
+
         return True
     
     def update(self, delta_time):
