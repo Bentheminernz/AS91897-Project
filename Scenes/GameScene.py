@@ -30,7 +30,7 @@ class GameScene(Scene):
         self.all_buttons = pygame.sprite.Group()
         self.question_blocks = []
 
-        self.player = Player("./Assets/Players/Player1.png", (650, 650))
+        self.player = Player("./Assets/Players/StandingA.png", (650, 650))
         self.all_sprites.add(self.player)
 
         self.load_new_question(use_current=self.is_first_load)
@@ -207,6 +207,11 @@ class GameScene(Scene):
             for block in self.question_blocks:
                 block.on_collision(self.player)
                 self.player_data = PlayerDataContext.get_data()
+
+            self.player_score = self.font.render(
+                f"Score: {self.player_data['score']}", True, (255, 255, 255)
+            )
+            self.player_score_rect = self.player_score.get_rect(topright=(self.window_size[0] - 10, 10))
 
             self.all_sprites.update(self.scene_manager.screen, delta_time)
             self.all_buttons.update()
