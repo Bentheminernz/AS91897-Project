@@ -8,7 +8,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, image_path, position):
         # creates the player
         super().__init__()
-        self.image = pygame.image.load(image_path)
+        self.image = pygame.image.load(image_path).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.5, self.image.get_height() * 0.5))
         self.rect = self.image.get_rect(topleft=position)
         self.speed = 350
         self.gravity_force = 0
