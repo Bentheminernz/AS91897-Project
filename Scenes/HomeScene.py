@@ -19,6 +19,11 @@ class HomeScene(Scene):
 
         self.create_ui()
 
+        self.topics = (
+            ('Hygiene', 1),
+            ('Health', 2),
+        )
+
     def create_ui(self):
         self.all_buttons.empty()
         self.all_textfields.empty()
@@ -35,7 +40,7 @@ class HomeScene(Scene):
             font_size=int(height * 0.06),
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
-            button_action=self.start_game,
+            button_action=lambda: self.show_topic_selection_ui()
         )
         self.all_buttons.add(self.start_button)
 
@@ -78,9 +83,39 @@ class HomeScene(Scene):
         self.gradient = VerticalGradient(
             (0, 0, 0), (0, 0, 100), width, height
         )
+    
+    def show_topic_selection_ui(self):
+        self.all_buttons.empty()
+        self.all_textfields.empty()
 
-    def start_game(self):
-        self.scene_manager.set_scene(GameScene(self.scene_manager))
+        width, height = self.window_size
+        center_x = width // 2
+        start_y = height * 0.5
+        button_spacing = height * 0.08
+
+        for topic, topic_id in self.topics:
+            button = Button(
+                topic,
+                (center_x, start_y + button_spacing * (self.topics.index((topic, topic_id)))),
+                font_size=int(height * 0.05),
+                color=(255, 255, 255),
+                bg_color=(0, 100, 0),
+                button_action=lambda t=topic_id: self.start_game(t)
+            )
+            self.all_buttons.add(button)
+
+        back_button = Button(
+            "Back to Menu",
+            (center_x, start_y + button_spacing * len(self.topics)),
+            font_size=int(height * 0.05),
+            color=(255, 255, 255),
+            bg_color=(100, 0, 0),
+            button_action=self.create_ui
+        )
+        self.all_buttons.add(back_button)
+
+    def start_game(self, topic_id):
+        self.scene_manager.set_scene(GameScene(self.scene_manager, topic_id))
 
     def handle_events(self, events):
         for event in events:

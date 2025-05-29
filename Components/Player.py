@@ -30,11 +30,24 @@ class Player(pygame.sprite.Sprite):
             "movingC": "./Assets/Players/MovingC.png",
             "movingD": "./Assets/Players/MovingD.png",
         }
+        
+        self.animation_timer = 0
+        self.animation_speed = 0.15
+        self.current_movement_frame = 0
+        self.movement_frames = ["movingA", "movingB", "movingC", "movingD"]
+        self.is_moving = False
 
     def animate_player(self, animation_name):
         if animation_name in self.animation_frames:
+            original_width = self.original_image.get_width()
+            original_height = self.original_image.get_height()
+            
             self.image = pygame.image.load(self.animation_frames[animation_name]).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (self.original_image.get_width() * 0.5, self.original_image.get_height() * 0.5))
+            self.image = pygame.transform.scale(self.image, (int(original_width), int(original_height)))
+            
+            # Apply direction flip if needed
+            if not self.facing_right:
+                self.image = pygame.transform.flip(self.image, True, False)
         else:
             raise ValueError(f"Animation '{animation_name}' not found in animation frames.")
 
@@ -49,22 +62,38 @@ class Player(pygame.sprite.Sprite):
 
         # handles player movement
         direction = pygame.Vector2(0, 0)
+        was_moving = self.is_moving
+        self.is_moving = False
+        
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             direction.x -= 1
+            self.is_moving = True
             if self.facing_right:
                 self.facing_right = False
-                self.update_sprite_direction()
-                random_animation_frame = random.choice(list(self.animation_frames.values()))
-                self.animate_player(random_animation_frame)
                 
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             direction.x += 1
+            self.is_moving = True
             if not self.facing_right:
                 self.facing_right = True
-                self.update_sprite_direction()
                 
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             direction.y += 1
+            
+        # Handle animation
+        if self.is_moving:
+            # Update animation timer
+            self.animation_timer += delta_time
+            if self.animation_timer >= self.animation_speed:
+                self.animation_timer = 0
+                self.current_movement_frame = (self.current_movement_frame + 1) % len(self.movement_frames)
+            
+            # Apply movement animation
+            self.animate_player(self.movement_frames[self.current_movement_frame])
+        else:
+            # Player is idle
+            if was_moving:  # Just stopped moving
+                self.animate_player("idle")
             
         if (
             (keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w])
@@ -119,9 +148,3 @@ class Player(pygame.sprite.Sprite):
         if self.rect.top < 0:
             self.rect.top = 0
             self.gravity_force = 0
-
-    def update_sprite_direction(self):
-        if self.facing_right:
-            self.image = self.original_image
-        else:
-            self.image = pygame.transform.flip(self.original_image, True, False)

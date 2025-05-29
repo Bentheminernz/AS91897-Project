@@ -11,14 +11,21 @@ default_player_data = {
     "player_name": "Player",
     "score": 0,
     "completed_questions": [],
-    "current_question": None,
     "completed_intro": False,
     "settings": {
         "sound": True,
         "music": True,
     },
-    "achievements": [
-        1
+    "achievements": [],
+    "high_scores": [
+        {
+            "topic": 1,
+            "score": 0,
+        },
+        {
+            "topic": 2,
+            "score": 0,
+        }
     ]
 }
 
@@ -29,10 +36,10 @@ def validate_player_data(player_data):
         "player_name",
         "score",
         "completed_questions",
-        "current_question",
         "completed_intro",
         "settings",
         "achievements",
+        "high_scores"
     ]
 
     for key in required_top_keys:
@@ -64,10 +71,6 @@ def validate_player_data(player_data):
         save_logger.error("Completed questions must be a list.")
         return False
 
-    if not isinstance(player_data["current_question"], (int, type(None))):
-        save_logger.error("Current question must be an integer or None.")
-        return False
-
     if not isinstance(player_data["completed_intro"], bool):
         save_logger.error("Completed intro must be a boolean.")
         return False
@@ -78,6 +81,10 @@ def validate_player_data(player_data):
     
     if not isinstance(player_data["achievements"], list):
         save_logger.error("Achievements must be a list.")
+        return False
+    
+    if not isinstance(player_data["high_scores"], list):
+        save_logger.error("High scores must be a list.")
         return False
 
     save_logger.info("Player data validation successful.")
