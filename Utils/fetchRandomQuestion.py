@@ -4,7 +4,7 @@ import os
 from Utils.loggerConfig import utils_logger
 
 # function for loading a random question from my questions.json file
-def fetch_random_question():
+def fetch_random_question(topic_id):
     # check if it exists, otherwise throw an error
     json_file_path = "./Assets/data/questions.json"
     if not os.path.exists(json_file_path):
@@ -13,11 +13,21 @@ def fetch_random_question():
     # open the json file
     with open(json_file_path, "r") as file:
         data = json.load(file)
-        questions = data.get("questions", [])
+        
+        topic_data = None
+        for topic in data:
+            if topic.get("id") == topic_id:
+                topic_data = topic
+                break
+        
+        if topic_data is None:
+            raise ValueError(f"No topic found with ID {topic_id}")
+        
+        questions = topic_data.get("questions", [])
         if not questions:
-            raise ValueError("No questions found in the JSON file.")
+            raise ValueError(f"No questions found for topic ID {topic_id}")
 
-        # selects a random question from the json file
+        # selects a random question from the filtered questions
         random_question = random.choice(questions)
         return random_question
     

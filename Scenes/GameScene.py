@@ -9,8 +9,9 @@ from Utils.loggerConfig import game_logger
 from Utils.fetchRandomQuestion import fetch_random_question, load_specific_question
 
 class GameScene(Scene):
-    def __init__(self, scene_manager):
+    def __init__(self, scene_manager, topic_id):
         self.scene_manager = scene_manager
+        self.topic_id = topic_id
         self.player_data = PlayerDataContext.get_data()
         self.completed_questions = self.player_data.get("completed_questions", [])
         self.has_completed_all_questions = False
@@ -33,13 +34,18 @@ class GameScene(Scene):
         self.player = Player("./Assets/Players/StandingA.png", (650, 650))
         self.all_sprites.add(self.player)
 
-        self.load_new_question(use_current=self.is_first_load)
-        self.is_first_load = False
+        self.load_new_question()
 
         self.create_ui()
         self.create_pause_menu()
+    
+    def reset_game(self):
+        PlayerDataContext.reset_completed_questions()
+        self.completed_questions = []
+        self.has_completed_all_questions = False
+        self.load_new_question()
 
-    def load_new_question(self, use_current=False):
+    def load_new_question(self):
         for block in self.question_blocks:
             self.all_sprites.remove(block)
         self.question_blocks.clear()
@@ -50,19 +56,13 @@ class GameScene(Scene):
         max_attempts = 10
         random_question = None
 
-        if use_current and self.player_data.get("current_question") is not None:
-            game_logger.info(f"Loading existing question: {self.player_data['current_question']}")
-            random_question = load_specific_question(
-                self.player_data["current_question"]
-            )
-        else:
-            while attempts < max_attempts:
-                random_question = fetch_random_question()
-                question_id = random_question.get("id", "No question ID found")
+        while attempts < max_attempts:
+            random_question = fetch_random_question(self.topic_id)
+            question_id = random_question.get("id", "No question ID found")
 
-                if question_id not in self.completed_questions:
-                    break
-                attempts += 1
+            if question_id not in self.completed_questions:
+                break
+            attempts += 1
 
         if attempts >= max_attempts:
             self.has_completed_all_questions = True
@@ -70,18 +70,25 @@ class GameScene(Scene):
             self.question_surface = self.font.render(
                 self.question_text, True, (255, 255, 255)
             )
+
+            self.replay_buttons = pygame.sprite.Group()
+
+            self.replay_button = Button(
+                "Replay",
+                (self.window_size[0] // 2 - 100, self.window_size[1] // 2),
+                font_size=40,
+                color=(255, 255, 255),
+                bg_color=(0, 100, 0),
+                button_action=lambda: self.reset_game()
+            )
+            self.replay_buttons.add(self.replay_button)
+
             game_logger.info("All questions completed.")
-            self.player_data["current_question"] = None
-            PlayerDataContext.update_data(self.player_data)
             return
-        
+
         self.question_text = random_question.get("question_title", "No question found")
         question_id = random_question.get("id", "No question ID found")
         answers = random_question.get("answers", ["No answers found"])
-
-        if not use_current:
-            self.player_data["current_question"] = question_id
-            PlayerDataContext.update_data(self.player_data)
 
         self.question_surface = self.font.render(
             self.question_text, True, (255, 255, 255)
@@ -105,6 +112,7 @@ class GameScene(Scene):
                 self.player_data,
                 on_correct_answer=self.load_new_question,
                 question_id=question_id,
+                topic_id=self.topic_id
             )
             self.all_sprites.add(block)
             self.question_blocks.append(block)
@@ -147,10 +155,20 @@ class GameScene(Scene):
             bg_color=(150, 0, 0),
             button_action=lambda: self.scene_manager.set_scene(HomeScene(self.scene_manager))
         )
+
+        exit_button = Button(
+            "Exit Game",
+            (center_x - 100, center_y + button_spacing * 2),
+            font_size=40,
+            color=(255, 255, 255),
+            bg_color=(150, 0, 0),
+            button_action=lambda: PlayerDataContext.quit_and_save(self.player_data, self.scene_manager)
+        )
         
         self.pause_buttons.add(resume_button)
         self.pause_buttons.add(save_button)
         self.pause_buttons.add(menu_button)
+        self.pause_buttons.add(exit_button)
         
     def toggle_pause(self):
         self.paused = not self.paused
@@ -191,6 +209,12 @@ class GameScene(Scene):
                 for button in self.pause_buttons:
                     if hasattr(button, "handle_event"):
                         button.handle_event(event)
+
+            if self.has_completed_all_questions and event.type == pygame.MOUSEBUTTONDOWN:
+                if hasattr(self, 'replay_buttons'):
+                    for button in self.replay_buttons:
+                        if hasattr(button, "handle_event"):
+                            button.handle_event(event)
         
         return True
     
@@ -215,6 +239,9 @@ class GameScene(Scene):
 
             self.all_sprites.update(self.scene_manager.screen, delta_time)
             self.all_buttons.update()
+
+            if self.has_completed_all_questions and hasattr(self, 'replay_buttons'):
+                self.replay_buttons.update()
         else:
             self.pause_buttons.update()
     
@@ -225,6 +252,9 @@ class GameScene(Scene):
         self.all_buttons.draw(screen)
         screen.blit(self.player_score, self.player_score_rect)
         screen.blit(self.question_surface, (10, 10))
+
+        if self.has_completed_all_questions and hasattr(self, 'replay_buttons'):
+            self.replay_buttons.draw(screen)
         
         if self.paused:
             screen.blit(self.pause_overlay, (0, 0))

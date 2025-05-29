@@ -8,7 +8,7 @@ from Utils import PlayerDataContext
 class QuestionBlock(pygame.sprite.Sprite):
     # initialises the question block and sets its variables
     def __init__(
-        self, image_path, position, text, is_correct, player_data, on_correct_answer, question_id
+        self, image_path, position, text, is_correct, player_data, on_correct_answer, question_id, topic_id
     ):
         super().__init__()
         self.original_image = pygame.image.load(image_path)
@@ -19,6 +19,7 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.player_data = player_data
         self.on_correct_answer = on_correct_answer
         self.question_id = question_id
+        self.topic_id = topic_id
         self.correct_audio = pygame.mixer.Sound("./Assets/Audio/Correct.wav")
         self.incorrect_audio = pygame.mixer.Sound("./Assets/Audio/Incorrect.wav")
         self.audio_volume = 1.0 if PlayerDataContext.is_sound_enabled() else 0.0
@@ -44,6 +45,8 @@ class QuestionBlock(pygame.sprite.Sprite):
                 component_logger.info("Correct answer!")
                 self.player_data["score"] += 1
                 self.player_data["completed_questions"].append(self.question_id)
+                self.player_data["high_score"][self.topic_id] = self.player_data["score"]
+                self.player_data
 
                 self.correct_audio.play()
 
