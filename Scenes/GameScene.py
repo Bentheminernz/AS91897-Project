@@ -55,9 +55,12 @@ class GameScene(Scene):
         attempts = 0
         max_attempts = 10
         random_question = None
+        max_questions = 0
 
         while attempts < max_attempts:
-            random_question = fetch_random_question(self.topic_id)
+            random_question_raw = fetch_random_question(self.topic_id)
+            random_question = random_question_raw.get("question", {})
+            max_questions = random_question_raw.get("max_questions", 0)
             question_id = random_question.get("id", "No question ID found")
 
             if question_id not in self.completed_questions:
@@ -112,7 +115,8 @@ class GameScene(Scene):
                 self.player_data,
                 on_correct_answer=self.load_new_question,
                 question_id=question_id,
-                topic_id=self.topic_id
+                topic_id=self.topic_id,
+                max_questions=max_questions
             )
             self.all_sprites.add(block)
             self.question_blocks.append(block)
@@ -190,8 +194,14 @@ class GameScene(Scene):
 
         self.font = pygame.font.Font(None, int(height * 0.05))
 
+        topic_score = 0
+        for score_entry in self.player_data.get('score', []):
+            if score_entry.get('topic') == self.topic_id:
+                topic_score = score_entry.get('score', 0)
+                break
+        
         self.player_score = self.font.render(
-            f"Score: {self.player_data['score']}", True, (255, 255, 255)
+            f"Score: {topic_score}", True, (255, 255, 255)
         )
         self.player_score_rect = self.player_score.get_rect(topright=(width - 10, 10))
 
@@ -232,8 +242,13 @@ class GameScene(Scene):
                 block.on_collision(self.player)
                 self.player_data = PlayerDataContext.get_data()
 
+            topic_score = 0
+            for score_entry in self.player_data.get('score', []):
+                if score_entry.get('topic') == self.topic_id:
+                    topic_score = score_entry.get('score', 0)
+                    break
             self.player_score = self.font.render(
-                f"Score: {self.player_data['score']}", True, (255, 255, 255)
+                f"Score: {topic_score}", True, (255, 255, 255)
             )
             self.player_score_rect = self.player_score.get_rect(topright=(self.window_size[0] - 10, 10))
 

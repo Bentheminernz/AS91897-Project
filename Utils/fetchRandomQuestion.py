@@ -13,11 +13,13 @@ def fetch_random_question(topic_id):
     # open the json file
     with open(json_file_path, "r") as file:
         data = json.load(file)
+        max_questions_in_topic = 0
         
         topic_data = None
         for topic in data:
             if topic.get("id") == topic_id:
                 topic_data = topic
+                max_questions_in_topic = len(topic.get("questions", []))
                 break
         
         if topic_data is None:
@@ -29,7 +31,11 @@ def fetch_random_question(topic_id):
 
         # selects a random question from the filtered questions
         random_question = random.choice(questions)
-        return random_question
+
+        return {
+            "max_questions": max_questions_in_topic,
+            "question": random_question,
+        }
     
 def load_specific_question(question_id):
     # check if it exists, otherwise throw an error
