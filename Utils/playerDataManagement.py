@@ -9,7 +9,16 @@ import time
 default_player_data = {
     "id": str(uuid.uuid4()),
     "player_name": "Player",
-    "score": 0,
+    "score": [
+        {
+            "topic": 1,
+            "score": 0,
+        },
+        {
+            "topic": 2,
+            "score": 0,
+        }
+    ],
     "completed_questions": [],
     "completed_intro": False,
     "settings": {
@@ -54,6 +63,24 @@ def validate_player_data(player_data):
         if "music" not in player_data["settings"]:
             save_logger.error("Missing key: settings.music")
             return False
+        
+    if "high_scores" in player_data:
+        for score in player_data["high_scores"]:
+            if "topic" not in score or "score" not in score:
+                save_logger.error("High scores must contain 'topic' and 'score'.")
+                return False
+            if not isinstance(score["topic"], int) or not isinstance(score["score"], int):
+                save_logger.error("High scores 'topic' and 'score' must be integers.")
+                return False
+            
+    if "score" in player_data:
+        for score in player_data["score"]:
+            if "topic" not in score or "score" not in score:
+                save_logger.error("Score must contain 'topic' and 'score'.")
+                return False
+            if not isinstance(score["topic"], int) or not isinstance(score["score"], int):
+                save_logger.error("Score 'topic' and 'score' must be integers.")
+                return False
 
     if not isinstance(player_data["id"], str):
         save_logger.error("ID must be a string.")
@@ -61,10 +88,6 @@ def validate_player_data(player_data):
 
     if not isinstance(player_data["player_name"], str):
         save_logger.error("Player name must be a string.")
-        return False
-
-    if not isinstance(player_data["score"], int):
-        save_logger.error("Score must be an integer.")
         return False
 
     if not isinstance(player_data["completed_questions"], list):
