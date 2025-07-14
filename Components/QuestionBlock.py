@@ -2,13 +2,21 @@ import pygame
 from Utils.loggerConfig import component_logger
 from Utils import PlayerDataContext
 
+
 # this is a custom question block class that is used to create question blocks in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
 # it has an image, a position, a text, a color, a background color and a button action
 class QuestionBlock(pygame.sprite.Sprite):
     # initialises the question block and sets its variables
     def __init__(
-        self, image_path, position, text, is_correct, player_data, on_correct_answer, question_id
+        self,
+        image_path,
+        position,
+        text,
+        is_correct,
+        player_data,
+        on_correct_answer,
+        question_id,
     ):
         super().__init__()
         self.original_image = pygame.image.load(image_path)

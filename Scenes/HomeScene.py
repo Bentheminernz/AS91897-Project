@@ -7,6 +7,7 @@ from Scenes.SettingsScene import SettingsScene
 from Scenes.AchievementsScene import AchievementsScene
 from Utils import PlayerDataContext
 
+
 class HomeScene(Scene):
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
@@ -45,7 +46,9 @@ class HomeScene(Scene):
             font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(0, 0, 100),
-            button_action=lambda: self.scene_manager.set_scene(SettingsScene(self.scene_manager)),
+            button_action=lambda: self.scene_manager.set_scene(
+                SettingsScene(self.scene_manager)
+            ),
         )
         self.all_buttons.add(self.settings_button)
 
@@ -55,7 +58,9 @@ class HomeScene(Scene):
             font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(100, 100, 0),
-            button_action=lambda: self.scene_manager.set_scene(AchievementsScene(self.scene_manager)),
+            button_action=lambda: self.scene_manager.set_scene(
+                AchievementsScene(self.scene_manager)
+            ),
         )
         self.all_buttons.add(self.achievements_button)
 
@@ -75,9 +80,7 @@ class HomeScene(Scene):
         )
         self.title_pos = (center_x * 0.75, height * 0.15)
 
-        self.gradient = VerticalGradient(
-            (0, 0, 0), (0, 0, 100), width, height
-        )
+        self.gradient = VerticalGradient((0, 0, 0), (0, 0, 100), width, height)
 
     def start_game(self):
         self.scene_manager.set_scene(GameScene(self.scene_manager))
@@ -86,7 +89,7 @@ class HomeScene(Scene):
         for event in events:
             if event.type == pygame.QUIT:
                 return False
-            
+
             for button in self.all_buttons:
                 if hasattr(button, "handle_event"):
                     button.handle_event(event)
@@ -95,7 +98,7 @@ class HomeScene(Scene):
                 textfield.handle_event(event)
 
         return True
-    
+
     def update(self, delta_time):
         current_size = pygame.display.get_surface().get_size()
         if current_size != self.window_size:
