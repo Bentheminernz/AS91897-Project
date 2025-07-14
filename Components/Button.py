@@ -1,6 +1,7 @@
 import pygame
 from Utils import PlayerDataContext
 
+
 # this is a custom button class that is used to create buttons in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
 # it has a text, position, font size, color, background color and a button action
@@ -42,10 +43,10 @@ class Button(pygame.sprite.Sprite):
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()[0]
-        
+
         if self.rect.collidepoint(mouse_pos):
             self.image = self.font.render(self.text, True, (255, 0, 0))
-            
+
             if mouse_pressed:
                 self.is_pressed = True
             elif self.is_pressed:
@@ -55,7 +56,7 @@ class Button(pygame.sprite.Sprite):
             self.image = self.original_image.copy()
             if not mouse_pressed:
                 self.is_pressed = False
-                
+
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if self.rect.collidepoint(event.pos) and self.is_pressed:

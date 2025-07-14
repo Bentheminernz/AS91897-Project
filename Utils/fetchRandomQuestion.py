@@ -3,6 +3,7 @@ import random
 import os
 from Utils.loggerConfig import utils_logger
 
+
 # function for loading a random question from my questions.json file
 def fetch_random_question(topic_id):
     # check if it exists, otherwise throw an error
@@ -14,17 +15,17 @@ def fetch_random_question(topic_id):
     with open(json_file_path, "r") as file:
         data = json.load(file)
         max_questions_in_topic = 0
-        
+
         topic_data = None
         for topic in data:
             if topic.get("id") == topic_id:
                 topic_data = topic
                 max_questions_in_topic = len(topic.get("questions", []))
                 break
-        
+
         if topic_data is None:
             raise ValueError(f"No topic found with ID {topic_id}")
-        
+
         questions = topic_data.get("questions", [])
         if not questions:
             raise ValueError(f"No questions found for topic ID {topic_id}")
@@ -36,7 +37,8 @@ def fetch_random_question(topic_id):
             "max_questions": max_questions_in_topic,
             "question": random_question,
         }
-    
+
+
 def load_specific_question(question_id):
     # check if it exists, otherwise throw an error
     json_file_path = "./Assets/data/questions.json"
