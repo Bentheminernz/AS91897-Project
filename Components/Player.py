@@ -3,6 +3,7 @@ from Utils import PlayerDataContext
 
 import random
 
+
 # this is the player class, it inherits from the pygame sprite class, so it can be used in sprite groups
 # it has an image, a rect, a speed and a gravity force
 # it also has a function to update the players movement and a function to handle the players gravity
@@ -11,13 +12,19 @@ class Player(pygame.sprite.Sprite):
         # creates the player
         super().__init__()
         self.original_image = pygame.image.load(image_path).convert_alpha()
-        self.original_image = pygame.transform.scale(self.original_image, (self.original_image.get_width() * 0.5, self.original_image.get_height() * 0.5))
-        
+        self.original_image = pygame.transform.scale(
+            self.original_image,
+            (
+                self.original_image.get_width() * 0.5,
+                self.original_image.get_height() * 0.5,
+            ),
+        )
+
         self.default_faces_right = True
         self.facing_right = True
-        
+
         self.image = self.original_image
-            
+
         self.rect = self.image.get_rect(topleft=position)
         self.speed = 350
         self.gravity_force = 0
@@ -30,7 +37,7 @@ class Player(pygame.sprite.Sprite):
             "movingC": "./Assets/Players/MovingC.png",
             "movingD": "./Assets/Players/MovingD.png",
         }
-        
+
         self.animation_timer = 0
         self.animation_speed = 0.15
         self.current_movement_frame = 0
@@ -41,15 +48,21 @@ class Player(pygame.sprite.Sprite):
         if animation_name in self.animation_frames:
             original_width = self.original_image.get_width()
             original_height = self.original_image.get_height()
-            
-            self.image = pygame.image.load(self.animation_frames[animation_name]).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (int(original_width), int(original_height)))
-            
+
+            self.image = pygame.image.load(
+                self.animation_frames[animation_name]
+            ).convert_alpha()
+            self.image = pygame.transform.scale(
+                self.image, (int(original_width), int(original_height))
+            )
+
             # Apply direction flip if needed
             if not self.facing_right:
                 self.image = pygame.transform.flip(self.image, True, False)
         else:
-            raise ValueError(f"Animation '{animation_name}' not found in animation frames.")
+            raise ValueError(
+                f"Animation '{animation_name}' not found in animation frames."
+            )
 
     # this is the function that updates the players movement
     def update(self, *args):
@@ -64,37 +77,39 @@ class Player(pygame.sprite.Sprite):
         direction = pygame.Vector2(0, 0)
         was_moving = self.is_moving
         self.is_moving = False
-        
+
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             direction.x -= 1
             self.is_moving = True
             if self.facing_right:
                 self.facing_right = False
-                
+
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             direction.x += 1
             self.is_moving = True
             if not self.facing_right:
                 self.facing_right = True
-                
+
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             direction.y += 1
-            
+
         # Handle animation
         if self.is_moving:
             # Update animation timer
             self.animation_timer += delta_time
             if self.animation_timer >= self.animation_speed:
                 self.animation_timer = 0
-                self.current_movement_frame = (self.current_movement_frame + 1) % len(self.movement_frames)
-            
+                self.current_movement_frame = (self.current_movement_frame + 1) % len(
+                    self.movement_frames
+                )
+
             # Apply movement animation
             self.animate_player(self.movement_frames[self.current_movement_frame])
         else:
             # Player is idle
             if was_moving:  # Just stopped moving
                 self.animate_player("idle")
-            
+
         if (
             (keys[pygame.K_SPACE] or keys[pygame.K_UP] or keys[pygame.K_w])
             and not is_jump

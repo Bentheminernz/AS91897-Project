@@ -1,5 +1,6 @@
 import pygame
 
+
 class VerticalGradient:
     def __init__(self, color1, color2, width, height):
         self.color1 = color1
@@ -8,7 +9,7 @@ class VerticalGradient:
         self.height = height
         self.gradient_surface = pygame.Surface((width, height))
         self.create_gradient()
-    
+
     def create_gradient(self):
         for y in range(self.height):
             ratio = y / self.height
