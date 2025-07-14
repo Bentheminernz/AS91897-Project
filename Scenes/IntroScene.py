@@ -6,11 +6,12 @@ from Scenes.HomeScene import HomeScene
 from Utils.loggerConfig import game_logger
 from Utils import PlayerDataContext
 
+
 class IntroScene(Scene):
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
         self.player_data = PlayerDataContext.get_data()
-        
+
         self.all_buttons = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()
 
@@ -52,7 +53,7 @@ class IntroScene(Scene):
         for event in events:
             if event.type == pygame.QUIT:
                 return False
-            
+
             for button in self.all_buttons:
                 if hasattr(button, "handle_event"):
                     button.handle_event(event)
@@ -67,7 +68,7 @@ class IntroScene(Scene):
         screen.blit(self.intro_text, (200, 100))
         self.all_buttons.draw(screen)
         self.all_textfields.draw(screen)
-        
+
     def update(self, delta_time):
         self.all_buttons.update()
         self.all_textfields.update()

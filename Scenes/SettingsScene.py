@@ -7,6 +7,7 @@ from Utils.loggerConfig import utils_logger
 from Utils import PlayerDataContext
 from Utils import playerDataManagement
 
+
 class SettingsScene(Scene):
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
@@ -18,7 +19,7 @@ class SettingsScene(Scene):
         self.all_textfields = pygame.sprite.Group()
 
         self.window_size = pygame.display.get_surface().get_size()
-        
+
         self.create_ui()
 
     def create_ui(self):
@@ -48,7 +49,7 @@ class SettingsScene(Scene):
             "Sound Effects",
             (center_x, start_y + item_spacing),
             size=20,
-            font_size=30,   
+            font_size=30,
             text_color=(255, 255, 255),
             border_color=(255, 255, 255),
             check_color=(0, 255, 0),
@@ -103,7 +104,7 @@ class SettingsScene(Scene):
             self.player_data["settings"] = {}
         self.player_data["settings"]["sound"] = is_checked
         utils_logger.info(f"Sound setting changed to: {is_checked}")
-    
+
     def toggle_music(self, is_checked):
         if "settings" not in self.player_data:
             self.player_data["settings"] = {}
@@ -112,6 +113,7 @@ class SettingsScene(Scene):
 
     def save_settings(self):
         from Scenes.HomeScene import HomeScene
+
         self.player_data["player_name"] = self.name_textfield.text
         PlayerDataContext.update_data(self.player_data)
         utils_logger.info("Settings saved successfully.")
@@ -138,10 +140,11 @@ class SettingsScene(Scene):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     from Scenes.HomeScene import HomeScene
+
                     self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
         return True
-    
+
     def update(self, delta_time):
         current_size = pygame.display.get_surface().get_size()
         if current_size != self.window_size:

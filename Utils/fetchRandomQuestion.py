@@ -3,6 +3,7 @@ import random
 import os
 from Utils.loggerConfig import utils_logger
 
+
 # function for loading a random question from my questions.json file
 def fetch_random_question():
     # check if it exists, otherwise throw an error
@@ -20,7 +21,8 @@ def fetch_random_question():
         # selects a random question from the json file
         random_question = random.choice(questions)
         return random_question
-    
+
+
 def load_specific_question(question_id):
     # check if it exists, otherwise throw an error
     json_file_path = "./Assets/data/questions.json"
