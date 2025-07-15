@@ -50,6 +50,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
     # handles events, updates the scene and renders it to the screen
     scene_manager.handle_events(events)
     scene_manager.update(delta_time)

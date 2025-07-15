@@ -2,7 +2,6 @@ import os
 import json
 from Utils.loggerConfig import save_logger
 import uuid
-import requests
 import hashlib
 import time
 

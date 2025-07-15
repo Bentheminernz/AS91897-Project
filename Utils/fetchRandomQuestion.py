@@ -32,7 +32,6 @@ def fetch_random_question(topic_id):
 
         # selects a random question from the filtered questions
         random_question = random.choice(questions)
-
         return {
             "max_questions": max_questions_in_topic,
             "question": random_question,

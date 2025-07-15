@@ -6,7 +6,7 @@ import os
 # It creates a logger for each component and sets the log level to INFO.
 # The log messages are formatted to include the timestamp, logger name, log level, and message.
 def setup_logger(name, log_file, level=logging.INFO):
-    log_file_path = f"./Logs/"
+    log_file_path = "./Logs/"
     if not os.path.exists(log_file_path):
         os.makedirs(log_file_path)
 
