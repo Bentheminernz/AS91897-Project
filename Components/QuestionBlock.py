@@ -17,6 +17,7 @@ class QuestionBlock(pygame.sprite.Sprite):
         player_data,
         on_correct_answer,
         question_id,
+        PlayerAssets
         topic_id,
         max_questions,
     ):

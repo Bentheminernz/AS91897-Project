@@ -1,6 +1,5 @@
 import pygame
 
-
 # this is a custom achievement list item class, it is used to create the achievement list items in the achievement menu
 # it inherits from the pygame sprite class, so it can be used in sprite groups
 class AchievementListItem(pygame.sprite.Sprite):
