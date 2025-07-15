@@ -46,10 +46,6 @@ def is_sound_enabled():
     return get_data().get("settings", {}).get("sound", True)
 
 
-def is_music_enabled():
-    return get_data().get("settings", {}).get("music", True)
-
-
 def get_player_name():
     return get_data().get("player_name", "Player")
 
@@ -57,14 +53,8 @@ def get_player_name():
 def get_score():
     return get_data().get("score", 0)
 
-def save():
-    global _player_data
-    if _player_data is not None:
-        playerDataManagement.save_player_data(_player_data)
-        utils_logger.info("Global player data saved")
 
-
-def add_completed_question(question_id):
+def achievement_granter(achievement_id):
     global _player_data
     if _player_data is None:
         initialize()
@@ -73,12 +63,11 @@ def add_completed_question(question_id):
     if achievement_id not in player_achievements:
         player_achievements.append(achievement_id)
         _player_data["achievements"] = player_achievements
-    if question_id not in _player_data.get("completed_questions", []):
-        _player_data["completed_questions"].append(question_id)
         playerDataManagement.save_player_data(_player_data)
-        utils_logger.info(f"Granted achievement: {achievement_id}")
+        utils_logger.info(f"Achievement {achievement_id} granted")
     else:
         utils_logger.info(f"Achievement {achievement_id} already granted")
+
 
 def reset_completed_questions():
     global _player_data
@@ -97,6 +86,7 @@ def quit_and_save(player_data, scene_manager):
         scene_manager.quit_game()
     else:
         utils_logger.warning("No player data to save on quit")
+
 
 def save():
     global _player_data

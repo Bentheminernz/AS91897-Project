@@ -6,7 +6,7 @@ from Components.QuestionBlock import QuestionBlock
 from Utils.SceneManager import Scene
 from Utils import PlayerDataContext
 from Utils.loggerConfig import game_logger
-from Utils.fetchRandomQuestion import fetch_random_question, load_specific_question
+from Utils.fetchRandomQuestion import fetch_random_question
 
 
 class GameScene(Scene):
