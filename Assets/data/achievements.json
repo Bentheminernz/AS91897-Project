@@ -17,7 +17,7 @@
         {
             "id": 3,
             "name": "Eco Champion",
-            "description": "Complete all questions in the game.",
+            "description": "Answer 20 questions correctly.",
             "trophy": "gold",
             "points": 30
         },
