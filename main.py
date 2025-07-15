@@ -27,16 +27,22 @@ pygame.display.set_caption(
     f"2.6 Platformer - Based upon build: {build_number} ({commit_id})"
 )
 
+# creates a scene manager instance and makes its inital the scene based on whether the intro has been completed or not.
+# the scene manager is used to handle switching between scenes, for example, from the intro to the home scene.
+# it is custom written by me :)
 scene_manager = SceneManager(screen)
 if not has_completed_intro:
     scene_manager.set_scene(IntroScene(scene_manager))
 else:
     scene_manager.set_scene(HomeScene(scene_manager))
 
+# creates the game loop
 running = True
 clock = pygame.time.Clock()
 
+# while the loop is running, run the game!
 while running:
+    # delta_time is time since last frame. this is used to make sure the game doesn't slow down during frame drops
     delta_time = clock.tick(60) / 1000.0
     events = pygame.event.get()
 
@@ -44,6 +50,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
+    # handles events, updates the scene and renders it to the screen
     scene_manager.handle_events(events)
     scene_manager.update(delta_time)
     scene_manager.render(screen)

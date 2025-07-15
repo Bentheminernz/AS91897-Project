@@ -17,6 +17,9 @@ class QuestionBlock(pygame.sprite.Sprite):
         player_data,
         on_correct_answer,
         question_id,
+        PlayerAssets
+        topic_id,
+        max_questions,
     ):
         super().__init__()
         self.original_image = pygame.image.load(image_path)
@@ -27,6 +30,8 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.player_data = player_data
         self.on_correct_answer = on_correct_answer
         self.question_id = question_id
+        self.topic_id = topic_id
+        self.max_questions = max_questions
         self.correct_audio = pygame.mixer.Sound("./Assets/Audio/Correct.wav")
         self.incorrect_audio = pygame.mixer.Sound("./Assets/Audio/Incorrect.wav")
         self.audio_volume = 1.0 if PlayerDataContext.is_sound_enabled() else 0.0
@@ -50,8 +55,32 @@ class QuestionBlock(pygame.sprite.Sprite):
             component_logger.info(f"The answer was {self.is_correct}")
             if self.is_correct:
                 component_logger.info("Correct answer!")
-                self.player_data["score"] += 1
+
+                # Find and increment the score for this topic
+                score_entries = self.player_data.get("score", [])
+                for score_entry in score_entries:
+                    if score_entry.get("topic") == self.topic_id:
+                        score_entry["score"] += 1
+                        break
+
                 self.player_data["completed_questions"].append(self.question_id)
+
+                high_scores = self.player_data.get("high_scores", [])
+
+                topic_score_entry = None
+                for topic_score in high_scores:
+                    if topic_score.get("topic") == self.topic_id:
+                        topic_score_entry = topic_score
+                        break
+
+                if topic_score_entry:
+                    topic_score_entry["score"] = min(
+                        topic_score_entry["score"] + 1, self.max_questions
+                    )
+                else:
+                    high_scores.append({"topic": self.topic_id, "score": 1})
+
+                self.player_data["high_scores"] = high_scores
 
                 self.correct_audio.play()
 

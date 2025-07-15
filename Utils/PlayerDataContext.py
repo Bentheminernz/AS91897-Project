@@ -57,17 +57,46 @@ def get_player_name():
 def get_score():
     return get_data().get("score", 0)
 
+def save():
+    global _player_data
+    if _player_data is not None:
+        playerDataManagement.save_player_data(_player_data)
+        utils_logger.info("Global player data saved")
+
 
 def add_completed_question(question_id):
     global _player_data
     if _player_data is None:
         initialize()
 
+    player_achievements = _player_data.get("achievements", [])
+    if achievement_id not in player_achievements:
+        player_achievements.append(achievement_id)
+        _player_data["achievements"] = player_achievements
     if question_id not in _player_data.get("completed_questions", []):
         _player_data["completed_questions"].append(question_id)
         playerDataManagement.save_player_data(_player_data)
-        utils_logger.info(f"Added question {question_id} to completed questions")
+        utils_logger.info(f"Granted achievement: {achievement_id}")
+    else:
+        utils_logger.info(f"Achievement {achievement_id} already granted")
 
+def reset_completed_questions():
+    global _player_data
+    if _player_data is None:
+        initialize()
+
+    _player_data["completed_questions"] = []
+    playerDataManagement.save_player_data(_player_data)
+    utils_logger.info("Reset completed questions in player data")
+
+
+def quit_and_save(player_data, scene_manager):
+    if player_data is not None:
+        playerDataManagement.save_player_data(player_data)
+        utils_logger.info("Player data saved on quit")
+        scene_manager.quit_game()
+    else:
+        utils_logger.warning("No player data to save on quit")
 
 def save():
     global _player_data

@@ -4,7 +4,6 @@ from Utils import PlayerDataContext
 
 # this is a custom checkbox class that is used to create checkboxes in the game
 # it inherits from the pygame sprite class, so it can be used in sprite groups
-# it has a text, position, font size, color, background color and a button action
 class Checkbox(pygame.sprite.Sprite):
     # initialises the checkbox and sets its variables
     def __init__(
