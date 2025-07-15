@@ -22,7 +22,6 @@ default_player_data = {
     "completed_intro": False,
     "settings": {
         "sound": True,
-        "music": True,
     },
     "achievements": [],
     "high_scores": [
@@ -59,9 +58,6 @@ def validate_player_data(player_data):
     if "settings" in player_data:
         if "sound" not in player_data["settings"]:
             save_logger.error("Missing key: settings.sound")
-            return False
-        if "music" not in player_data["settings"]:
-            save_logger.error("Missing key: settings.music")
             return False
 
     if "high_scores" in player_data:

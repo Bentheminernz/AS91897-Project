@@ -35,6 +35,7 @@ class AchievementsScene(Scene):
     def create_ui(self):
         self.unlocked_list_items.empty()
         self.locked_list_items.empty()
+        self.buttons.empty()
 
         width, height = self.window_size
         center_x = width // 2

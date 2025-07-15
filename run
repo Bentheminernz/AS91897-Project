@@ -1,0 +1,37 @@
+if [ -n "$1" ]; then
+    choice="$1"
+else
+    echo "Please choose an option:"
+    echo "1) Run program"
+    echo "2) Lint code"
+    echo "3) Lint code with auto-fix"
+    echo "4) Format code (Black)"
+    echo "5) Exit"
+    read -p "Enter your choice [1-5]: " choice
+fi
+
+case $choice in
+    1)
+        echo "Running program..."
+        python3 main.py
+        ;;
+    2)
+        echo "Linting code..."
+        ruff check
+        ;;
+    3)
+        echo "Linting code with auto-fix..."
+        ruff check --fix
+        ;;
+    4)
+        echo "Formatting code with Black..."
+        black .
+        ;;
+    5)
+        echo "Exiting."
+        exit 0
+        ;;
+    *)
+        echo "Invalid choice."
+        ;;
+esac

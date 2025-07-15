@@ -58,24 +58,9 @@ class SettingsScene(Scene):
             on_toggle=self.toggle_sound,
         )
         self.all_checkboxes.add(sound_checkbox)
-
-        music_checkbox = Checkbox(
-            "Music",
-            (center_x, start_y + item_spacing * 2),
-            size=20,
-            font_size=30,
-            text_color=(255, 255, 255),
-            border_color=(255, 255, 255),
-            check_color=(0, 255, 0),
-            bg_color=(0, 0, 0),
-            initial_state=self.player_data.get("settings", {}).get("music", False),
-            on_toggle=self.toggle_music,
-        )
-        self.all_checkboxes.add(music_checkbox)
-
         reset_button = Button(
             "Reset Game",
-            (center_x, start_y + item_spacing * 3),
+            (center_x, start_y + item_spacing * 2),
             font_size=30,
             color=(255, 255, 255),
             bg_color=(255, 0, 0),
@@ -85,7 +70,7 @@ class SettingsScene(Scene):
 
         save_button = Button(
             "Return to Home and Save",
-            (center_x, start_y + item_spacing * 5),
+            (center_x, start_y + item_spacing * 4),
             font_size=30,
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
@@ -104,12 +89,6 @@ class SettingsScene(Scene):
             self.player_data["settings"] = {}
         self.player_data["settings"]["sound"] = is_checked
         utils_logger.info(f"Sound setting changed to: {is_checked}")
-
-    def toggle_music(self, is_checked):
-        if "settings" not in self.player_data:
-            self.player_data["settings"] = {}
-        self.player_data["settings"]["music"] = is_checked
-        utils_logger.info(f"Music setting changed to: {is_checked}")
 
     def save_settings(self):
         from Scenes.HomeScene import HomeScene

@@ -1,6 +1,6 @@
 import pygame
 from Utils import PlayerDataContext
-import random
+
 
 # this is the player class, it inherits from the pygame sprite class, so it can be used in sprite groups
 # it has an image, a rect, a speed and a gravity force

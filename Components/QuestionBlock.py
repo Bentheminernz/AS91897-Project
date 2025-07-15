@@ -17,7 +17,6 @@ class QuestionBlock(pygame.sprite.Sprite):
         player_data,
         on_correct_answer,
         question_id,
-        PlayerAssets
         topic_id,
         max_questions,
     ):
@@ -56,7 +55,6 @@ class QuestionBlock(pygame.sprite.Sprite):
             if self.is_correct:
                 component_logger.info("Correct answer!")
 
-                # Find and increment the score for this topic
                 score_entries = self.player_data.get("score", [])
                 for score_entry in score_entries:
                     if score_entry.get("topic") == self.topic_id:
@@ -81,6 +79,21 @@ class QuestionBlock(pygame.sprite.Sprite):
                     high_scores.append({"topic": self.topic_id, "score": 1})
 
                 self.player_data["high_scores"] = high_scores
+
+                if 1 not in self.player_data["achievements"]:
+                    PlayerDataContext.achievement_granter(1)
+
+                if (
+                    2 not in self.player_data["achievements"]
+                    and len(self.player_data["completed_questions"]) >= 10
+                ):
+                    PlayerDataContext.achievement_granter(2)
+
+                if (
+                    3 not in self.player_data["achievements"]
+                    and len(self.player_data["completed_questions"]) >= 20
+                ):
+                    PlayerDataContext.achievement_granter(3)
 
                 self.correct_audio.play()
 
