@@ -28,6 +28,8 @@ class Player(pygame.sprite.Sprite):
         self.gravity_force = 0
         self.jump_audio = pygame.mixer.Sound("./Assets/Audio/Jump.ogg")
         self.jump_audio.set_volume(1.0 if PlayerDataContext.is_sound_enabled() else 0.0)
+
+        # all the variables needed for player animations
         self.animation_frames = {
             "idle": "./Assets/Players/StandingA.png",
             "movingA": "./Assets/Players/MovingA.png",
@@ -42,7 +44,9 @@ class Player(pygame.sprite.Sprite):
         self.movement_frames = ["movingA", "movingB", "movingC", "movingD"]
         self.is_moving = False
 
+    # the function that actually animates the player
     def animate_player(self, animation_name):
+        # if the animation name is valid, then load it. And scale it to the original size
         if animation_name in self.animation_frames:
             original_width = self.original_image.get_width()
             original_height = self.original_image.get_height()
@@ -54,7 +58,7 @@ class Player(pygame.sprite.Sprite):
                 self.image, (int(original_width), int(original_height))
             )
 
-            # Apply direction flip if needed
+            # if the player is not facing right, then flip the image
             if not self.facing_right:
                 self.image = pygame.transform.flip(self.image, True, False)
         else:
@@ -91,9 +95,8 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             direction.y += 1
 
-        # Handle animation
+        # if the player is moving, then animate them!
         if self.is_moving:
-            # Update animation timer
             self.animation_timer += delta_time
             if self.animation_timer >= self.animation_speed:
                 self.animation_timer = 0
@@ -101,11 +104,11 @@ class Player(pygame.sprite.Sprite):
                     self.movement_frames
                 )
 
-            # Apply movement animation
+            # play the current movement frame
             self.animate_player(self.movement_frames[self.current_movement_frame])
         else:
-            # Player is idle
-            if was_moving:  # Just stopped moving
+            # if the player is not moving, then show the idle animation
+            if was_moving:
                 self.animate_player("idle")
 
         if (

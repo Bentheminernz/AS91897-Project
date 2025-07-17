@@ -37,8 +37,14 @@ class QuestionBlock(pygame.sprite.Sprite):
 
         # creates the surface
         self.image = pygame.Surface((width, height), pygame.SRCALPHA)
-        self.image.fill((0, 0, 0, 180))
-        pygame.draw.rect(self.image, (255, 255, 255), self.image.get_rect(), border_thickness, border_radius=12)
+        self.image.fill((0, 0, 0, 90))
+        pygame.draw.rect(
+            self.image,
+            (255, 255, 255),
+            self.image.get_rect(),
+            border_thickness,
+            border_radius=12,
+        )
 
         # prepare the font and wrap the text
         font = pygame.font.Font(None, 36)
@@ -59,7 +65,7 @@ class QuestionBlock(pygame.sprite.Sprite):
 
     def wrap_text(self, text, font, max_width):
         """wraps the text to fit within the specified max width"""
-        words = text.split(' ')
+        words = text.split(" ")
         lines = []
         current_line = ""
         for word in words:

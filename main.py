@@ -26,7 +26,7 @@ min_width = 1100
 min_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption(
-    f"2.6 Platformer - Based upon build: {build_number} ({commit_id})"
+    f"AS91897 Platformer - Based upon build: {build_number} ({commit_id})"
 )
 
 # creates a scene manager instance and makes its inital the scene based on whether the intro has been completed or not.

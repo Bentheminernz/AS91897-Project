@@ -38,7 +38,7 @@ class HomeScene(Scene):
         button_spacing = height * 0.08
 
         self.start_button = Button(
-            "Start Game" if self.player_data.get("score", 0) == 0 else "Continue",
+            "Start Game" if not self.has_any_score() else "Continue",
             (center_x, start_y),
             font_size=int(height * 0.06),
             color=(255, 255, 255),
@@ -82,8 +82,13 @@ class HomeScene(Scene):
         self.all_buttons.add(self.quit_button)
 
         title_font_size = int(height * 0.1)
+        title_str = (
+            f"Welcome {self.player_name}"
+            if not self.is_showing_topic_selection
+            else "Select Topic"
+        )
         self.title_text = pygame.font.Font(None, title_font_size).render(
-            f"Welcome {self.player_name}", True, (255, 255, 255)
+            title_str, True, (255, 255, 255)
         )
         self.title_pos = (center_x * 0.75, height * 0.15)
 
@@ -123,6 +128,16 @@ class HomeScene(Scene):
         )
         self.all_buttons.add(back_button)
 
+        title_font_size = int(height * 0.1)
+        self.title_text = pygame.font.Font(None, title_font_size).render(
+            "Select Topic", True, (255, 255, 255)
+        )
+        self.title_pos = (center_x * 0.75, height * 0.15)
+
+    def has_any_score(self):
+        scores = self.player_data.get("score", [])
+        return any(entry.get("score", 0) > 0 for entry in scores)
+
     def start_game(self, topic_id):
         self.scene_manager.set_scene(GameScene(self.scene_manager, topic_id))
 
@@ -130,6 +145,18 @@ class HomeScene(Scene):
         for event in events:
             if event.type == pygame.QUIT:
                 return False
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                if self.is_showing_topic_selection:
+                    self.create_ui()
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                if not self.is_showing_topic_selection:
+                    self.show_topic_selection_ui()
+                    return
+
+                if self.is_showing_topic_selection:
+                    self.scene_manager.set_scene(GameScene(self.scene_manager, 1))
 
             for button in self.all_buttons:
                 if hasattr(button, "handle_event"):

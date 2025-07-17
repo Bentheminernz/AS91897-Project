@@ -19,6 +19,7 @@ class Checkbox(pygame.sprite.Sprite):
         initial_state=False,
         on_toggle=None,
     ):
+        # initialize the parent class
         super().__init__()
         self.text = text
         self.position = position
@@ -38,23 +39,21 @@ class Checkbox(pygame.sprite.Sprite):
         self.button_sound = pygame.mixer.Sound("Assets/Audio/SelectSound.wav")
         self.button_sound.set_volume(1.0 if self.sound_enabled else 0.0)
 
-        # Create the initial surface and rect
+        # creates the initial image and rect for the checkbox
         self.update_image()
-
-        # For tracking press state
         self.is_pressed = False
 
     def update_image(self):
-        # Calculate total width needed for checkbox plus text
+        # calculate the size of the checkbox and text
         text_surface = self.font.render(self.text, True, self.text_color)
         total_width = self.size + 10 + text_surface.get_width()
         total_height = max(self.size, text_surface.get_height())
 
-        # Create a surface for the checkbox and text
+        # creates the surface for the checkbox
         self.image = pygame.Surface((total_width, total_height), pygame.SRCALPHA)
-        self.image.fill((0, 0, 0, 0))  # Transparent background
+        self.image.fill((0, 0, 0, 0))
 
-        # Draw the checkbox
+        # draw time!
         pygame.draw.rect(
             self.image,
             self.border_color,
@@ -62,7 +61,7 @@ class Checkbox(pygame.sprite.Sprite):
             2,
         )
 
-        # If checked, fill with the check color
+        # if it is checked then draw the check mark
         if self.is_checked:
             pygame.draw.rect(
                 self.image,
@@ -70,21 +69,22 @@ class Checkbox(pygame.sprite.Sprite):
                 (3, (total_height - self.size) // 2 + 3, self.size - 6, self.size - 6),
             )
 
-        # Draw the text
+        # draw the checkbox label text
         self.image.blit(
             text_surface,
             (self.size + 10, (total_height - text_surface.get_height()) // 2),
         )
 
-        # Set the rect
         self.rect = self.image.get_rect(center=self.position)
 
+    # toggles the checkbox state and calls the on_toggle callback if it exists
     def toggle(self):
         self.is_checked = not self.is_checked
         self.update_image()
         if self.on_toggle:
             self.on_toggle(self.is_checked)
 
+    # updates the checkbox based on mouse events
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()[0]
@@ -98,6 +98,7 @@ class Checkbox(pygame.sprite.Sprite):
         elif not mouse_pressed:
             self.is_pressed = False
 
+    # handles mouse events for the checkbox
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if self.rect.collidepoint(event.pos) and self.is_pressed:
