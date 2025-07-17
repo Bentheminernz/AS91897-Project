@@ -7,10 +7,8 @@ from Utils import PlayerDataContext
 # it inherits from the pygame sprite class, so it can be used in sprite groups
 # it has an image, a position, a text, a color, a background color and a button action
 class QuestionBlock(pygame.sprite.Sprite):
-    # initialises the question block and sets its variables
     def __init__(
         self,
-        image_path,
         position,
         text,
         is_correct,
@@ -21,8 +19,8 @@ class QuestionBlock(pygame.sprite.Sprite):
         max_questions,
     ):
         super().__init__()
-        self.original_image = pygame.image.load(image_path)
-        self.original_image = pygame.transform.scale(self.original_image, (100, 100))
+        width, height = 280, 120
+        border_thickness = 8
         self.text = str(text)
         self.is_killed = False
         self.is_correct = is_correct
@@ -37,13 +35,44 @@ class QuestionBlock(pygame.sprite.Sprite):
         self.correct_audio.set_volume(self.audio_volume)
         self.incorrect_audio.set_volume(self.audio_volume)
 
-        self.image = self.original_image.copy()
-        font = pygame.font.Font(None, 18)
-        text_color = (0, 255, 0) if is_correct else (255, 255, 255)
-        text_surface = font.render(self.text, True, text_color)
-        text_rect = text_surface.get_rect(center=(50, 50))
-        self.image.blit(text_surface, text_rect)
+        # creates the surface
+        self.image = pygame.Surface((width, height), pygame.SRCALPHA)
+        self.image.fill((0, 0, 0, 180))
+        pygame.draw.rect(self.image, (255, 255, 255), self.image.get_rect(), border_thickness, border_radius=12)
+
+        # prepare the font and wrap the text
+        font = pygame.font.Font(None, 36)
+        text_color = (255, 255, 255)
+        max_text_width = width - 2 * (border_thickness + 16)
+        wrapped_lines = self.wrap_text(self.text, font, max_text_width)
+
+        # render the wrapped text in the horizontal and vertical center of the block
+        total_text_height = len(wrapped_lines) * font.get_linesize()
+        y_offset = (height - total_text_height) // 2
+        for line in wrapped_lines:
+            text_surface = font.render(line, True, text_color)
+            text_rect = text_surface.get_rect(centerx=width // 2, y=y_offset)
+            self.image.blit(text_surface, text_rect)
+            y_offset += font.get_linesize()
+
         self.rect = self.image.get_rect(topleft=position)
+
+    def wrap_text(self, text, font, max_width):
+        """wraps the text to fit within the specified max width"""
+        words = text.split(' ')
+        lines = []
+        current_line = ""
+        for word in words:
+            test_line = current_line + (" " if current_line else "") + word
+            if font.size(test_line)[0] <= max_width:
+                current_line = test_line
+            else:
+                if current_line:
+                    lines.append(current_line)
+                current_line = word
+        if current_line:
+            lines.append(current_line)
+        return lines
 
     # this function is called upon every frame to check for collisions
     # if the player is colliding with the question block, it kills the block
@@ -61,9 +90,11 @@ class QuestionBlock(pygame.sprite.Sprite):
                         score_entry["score"] += 1
                         break
 
-                self.player_data["completed_questions"][self.topic_id][
-                    "questions"
-                ].append(self.question_id)
+                topic_questions = None
+                for topic_entry in self.player_data["completed_questions"]:
+                    if topic_entry.get("topic") == self.topic_id:
+                        topic_questions = topic_entry["questions"]
+                        break
 
                 high_scores = self.player_data.get("high_scores", [])
 
@@ -87,23 +118,15 @@ class QuestionBlock(pygame.sprite.Sprite):
 
                 if (
                     2 not in self.player_data["achievements"]
-                    and len(
-                        self.player_data["completed_questions"][self.topic_id][
-                            "questions"
-                        ]
-                    )
-                    >= 10
+                    and topic_questions is not None
+                    and len(topic_questions) >= 10
                 ):
                     PlayerDataContext.achievement_granter(2)
 
                 if (
                     3 not in self.player_data["achievements"]
-                    and len(
-                        self.player_data["completed_questions"][self.topic_id][
-                            "questions"
-                        ]
-                    )
-                    >= 20
+                    and topic_questions is not None
+                    and len(topic_questions) >= 20
                 ):
                     PlayerDataContext.achievement_granter(3)
 

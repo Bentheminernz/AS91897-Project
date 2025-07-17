@@ -22,6 +22,8 @@ pygame.init()
 # define screen size, creates the window and makes sprite group
 screen_width = 1200
 screen_height = 600
+min_width = 1100
+min_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption(
     f"2.6 Platformer - Based upon build: {build_number} ({commit_id})"
@@ -49,6 +51,11 @@ while running:
     for event in events:
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.VIDEORESIZE:
+            # make sure the screen is not smaller than the minimum size
+            new_width = max(event.w, min_width)
+            new_height = max(event.h, min_height)
+            screen = pygame.display.set_mode((new_width, new_height), pygame.RESIZABLE)
 
     # handles events, updates the scene and renders it to the screen
     scene_manager.handle_events(events)
