@@ -3,6 +3,7 @@ import random
 from Components.Player import Player
 from Components.Button import Button
 from Components.QuestionBlock import QuestionBlock
+from Components.VerticalGradient import VerticalGradient
 from Utils.SceneManager import Scene
 from Utils import PlayerDataContext
 from Utils.loggerConfig import game_logger
@@ -102,7 +103,7 @@ class GameScene(Scene):
 
         start_x = 125
         start_y = 200
-        spacing = 225
+        spacing = 300
 
         random.shuffle(answers)
         for i, answer in enumerate(answers):
@@ -111,7 +112,6 @@ class GameScene(Scene):
             block_x = start_x + (i * spacing)
             block_y = start_y
             block = QuestionBlock(
-                "./Assets/QuestionBlocks/QuestionBlock1.png",
                 (block_x, block_y),
                 answer_text,
                 is_correct,
@@ -213,6 +213,8 @@ class GameScene(Scene):
         )
         self.player_score_rect = self.player_score.get_rect(topright=(width - 10, 10))
 
+        self.gradient = VerticalGradient((39, 31, 35), (36, 21, 30), width, height)
+
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.QUIT:
@@ -275,6 +277,7 @@ class GameScene(Scene):
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.gradient.gradient_surface, (0, 0))
 
         self.all_sprites.draw(screen)
         self.all_buttons.draw(screen)
