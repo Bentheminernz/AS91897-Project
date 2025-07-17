@@ -254,6 +254,174 @@
                         "isCorrect": false
                     }
                 ]
+            },
+            {
+                "id": 13,
+                "question_title": "How long should you wash your hands with soap?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "At least 20 seconds.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "5 seconds is enough.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Just a quick rinse.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 14,
+                "question_title": "Which of these is the safest water for drinking?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Boiled or filtered water.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Water from a muddy pond.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Rainwater collected in dirty containers.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 15,
+                "question_title": "What should you do before eating food?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Wash your hands thoroughly.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Wipe hands on dirty clothes.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Nothing special is needed.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 16,
+                "question_title": "How often should you brush your teeth?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "At least twice a day.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Once a week is fine.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Only when they hurt.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 17,
+                "question_title": "Where should soap be stored to stay clean?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "In a clean, dry soap dish.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "On the dirty floor.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "In muddy water.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 18,
+                "question_title": "When should you wash your hands?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "After using the toilet and before eating.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Only when they look dirty.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Once a day is enough.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 19,
+                "question_title": "What is the best way to dry your hands after washing?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Use a clean towel or air dry.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Wipe them on dirty clothes.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Shake them and touch dirty surfaces.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 20,
+                "question_title": "Why is it important to keep toilets clean?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "To prevent the spread of diseases and bad smells.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Clean toilets waste water.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Dirty toilets are more comfortable.",
+                        "isCorrect": false
+                    }
+                ]
             }
         ]
     },
@@ -263,84 +431,420 @@
         "questions": [
             {
                 "id": 1,
-                "question_title": "What is the main cause of climate change?",
+                "question_title": "What percentage of the world's population lacks access to safely managed drinking water?",
                 "answers": [
                     {
                         "id": 1,
-                        "answer_text": "Increased greenhouse gas emissions from human activities.",
+                        "answer_text": "About 25% (2 billion people).",
                         "isCorrect": true
                     },
                     {
                         "id": 2,
-                        "answer_text": "Natural fluctuations in the Earth's climate.",
+                        "answer_text": "Less than 5%.",
                         "isCorrect": false
                     },
                     {
                         "id": 3,
-                        "answer_text": "Changes in ocean currents.",
+                        "answer_text": "More than 50%.",
                         "isCorrect": false
                     }
                 ]
             },
             {
                 "id": 2,
-                "question_title": "Which of these is a renewable energy source?",
+                "question_title": "Which disease is most commonly spread through contaminated water?",
                 "answers": [
                     {
                         "id": 1,
-                        "answer_text": "Solar power.",
+                        "answer_text": "Diarrhea and cholera.",
                         "isCorrect": true
                     },
                     {
                         "id": 2,
-                        "answer_text": "Coal.",
+                        "answer_text": "Common cold.",
                         "isCorrect": false
                     },
                     {
                         "id": 3,
-                        "answer_text": "Natural gas.",
+                        "answer_text": "Broken bones.",
                         "isCorrect": false
                     }
                 ]
             },
             {
                 "id": 3,
-                "question_title": "What is one way to reduce carbon footprint?",
+                "question_title": "What is the UN Sustainable Development Goal 6 target for universal water access?",
                 "answers": [
                     {
                         "id": 1,
-                        "answer_text": "Using public transportation instead of driving alone.",
+                        "answer_text": "Achieve universal access to safe water and sanitation by 2030.",
                         "isCorrect": true
                     },
                     {
                         "id": 2,
-                        "answer_text": "Leaving lights on when not needed.",
+                        "answer_text": "Provide water only to wealthy countries by 2030.",
                         "isCorrect": false
                     },
                     {
                         "id": 3,
-                        "answer_text": "Using plastic bags instead of reusable ones.",
+                        "answer_text": "Reduce water usage worldwide by 2030.",
                         "isCorrect": false
                     }
                 ]
             },
             {
                 "id": 4,
-                "question_title": "How does deforestation contribute to climate change?",
+                "question_title": "How many people die each day from diseases related to poor water and sanitation?",
                 "answers": [
                     {
                         "id": 1,
-                        "answer_text": "It reduces the number of trees that absorb CO2.",
+                        "answer_text": "Over 1,000 people, mostly children.",
                         "isCorrect": true
                     },
                     {
                         "id": 2,
-                        "answer_text": "It increases biodiversity.",
+                        "answer_text": "Less than 10 people.",
                         "isCorrect": false
                     },
                     {
                         "id": 3,
-                        "answer_text": "It has no effect on climate change.",
+                        "answer_text": "No one dies from water-related diseases.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 5,
+                "question_title": "What is the minimum amount of water needed per person per day for basic needs?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "20 liters (5 gallons).",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "1 liter (0.25 gallons).",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "100 liters (25 gallons).",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 6,
+                "question_title": "Which method is most effective for purifying water in emergency situations?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Boiling water for at least one minute.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Adding dirt to filter it.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Leaving it in the sun without covering.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 7,
+                "question_title": "What percentage of global wastewater is released into the environment without treatment?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "About 80%.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "About 20%.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Nearly 0%.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 8,
+                "question_title": "How far do some people in water-scarce areas walk daily to collect water?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Up to 6 kilometers (3.7 miles) or more.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Only a few meters.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Water is always available nearby.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 9,
+                "question_title": "Which technology can help communities access groundwater?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Hand pumps and boreholes.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Leaving buckets outside during rain.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Digging shallow holes with hands.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 10,
+                "question_title": "What is the main cause of water scarcity in many regions?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Poor water management and infrastructure.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Too much rainfall everywhere.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "People don't need much water.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 11,
+                "question_title": "How does proper sanitation help prevent disease outbreaks?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "It stops contamination of water sources and food.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "It has no effect on disease prevention.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "It makes diseases spread faster.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 12,
+                "question_title": "What role do women and girls often play in water collection globally?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "They bear primary responsibility, often missing school or work.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "They never collect water.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Only men collect water everywhere.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 13,
+                "question_title": "Which water storage method helps prevent contamination?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Covered containers with narrow openings and taps.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Open buckets left outside.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Dirty containers reused without cleaning.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 14,
+                "question_title": "What is greywater and how can it be reused safely?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Wastewater from sinks and showers that can be treated for garden irrigation.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Dirty water that should always be thrown away.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Water that is naturally grey in color.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 15,
+                "question_title": "How do improved toilet facilities benefit communities?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "They protect water sources and improve dignity and safety.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "They waste water and create problems.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "They are only for wealthy people.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 16,
+                "question_title": "What is the connection between climate change and water security?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Climate change affects rainfall patterns and increases droughts and floods.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Climate change has no effect on water.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Climate change only affects temperature.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 17,
+                "question_title": "How can schools promote better water and sanitation practices?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Providing clean facilities and teaching hygiene education.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Ignoring water and sanitation completely.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Only talking about it without taking action.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 18,
+                "question_title": "What is water stress and which regions are most affected?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "When water demand exceeds supply; affects Middle East, North Africa, and parts of Asia.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "When people worry about water; only affects rich countries.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "When water is too clean; affects all countries equally.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 19,
+                "question_title": "How can communities make water treatment more affordable and sustainable?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "Using local materials and solar-powered systems.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "Importing expensive equipment only.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "Avoiding water treatment completely.",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "id": 20,
+                "question_title": "What is the economic impact of poor water and sanitation?",
+                "answers": [
+                    {
+                        "id": 1,
+                        "answer_text": "It costs countries billions in healthcare and lost productivity.",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": 2,
+                        "answer_text": "It saves money for governments.",
+                        "isCorrect": false
+                    },
+                    {
+                        "id": 3,
+                        "answer_text": "It has no economic effects.",
                         "isCorrect": false
                     }
                 ]
