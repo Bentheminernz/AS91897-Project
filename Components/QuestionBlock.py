@@ -87,63 +87,53 @@ class QuestionBlock(pygame.sprite.Sprite):
         if self.rect.colliderect(player.rect) and not self.is_killed:
             component_logger.info(f"Player collided with question block: {self.text}")
             component_logger.info(f"The answer was {self.is_correct}")
+            
             if self.is_correct:
                 component_logger.info("Correct answer!")
-
-                score_entries = self.player_data.get("score", [])
-                for score_entry in score_entries:
-                    if score_entry.get("topic") == self.topic_id:
-                        score_entry["score"] += 1
-                        break
-
-                topic_questions = None
-                for topic_entry in self.player_data["completed_questions"]:
-                    if topic_entry.get("topic") == self.topic_id:
-                        topic_questions = topic_entry["questions"]
-                        break
-
-                high_scores = self.player_data.get("high_scores", [])
-
-                topic_score_entry = None
-                for topic_score in high_scores:
-                    if topic_score.get("topic") == self.topic_id:
-                        topic_score_entry = topic_score
-                        break
-
-                if topic_score_entry:
-                    topic_score_entry["score"] = min(
-                        topic_score_entry["score"] + 1, self.max_questions
-                    )
-                else:
-                    high_scores.append({"topic": self.topic_id, "score": 1})
-
-                self.player_data["high_scores"] = high_scores
-
-                if 1 not in self.player_data["achievements"]:
-                    PlayerDataContext.achievement_granter(1)
-
-                if (
-                    2 not in self.player_data["achievements"]
-                    and topic_questions is not None
-                    and len(topic_questions) >= 10
-                ):
-                    PlayerDataContext.achievement_granter(2)
-
-                if (
-                    3 not in self.player_data["achievements"]
-                    and topic_questions is not None
-                    and len(topic_questions) >= 20
-                ):
-                    PlayerDataContext.achievement_granter(3)
-
+                self._update_scores()
+                self._check_achievements()
                 self.correct_audio.play()
-
+                
                 if self.on_correct_answer:
                     self.on_correct_answer()
-
             else:
                 component_logger.info("Incorrect answer!")
                 self.incorrect_audio.play()
 
             self.is_killed = True
             self.kill()
+
+    def _update_scores(self):
+        score_entries = self.player_data.get("score", [])
+        for score_entry in score_entries:
+            if score_entry.get("topic") == self.topic_id:
+                score_entry["score"] += 1
+                break
+
+        high_scores = self.player_data.get("high_scores", [])
+        for high_score in high_scores:
+            if high_score.get("topic") == self.topic_id:
+                high_score["score"] = min(high_score["score"] + 1, self.max_questions)
+                break
+        else:
+            high_scores.append({"topic": self.topic_id, "score": 1})
+
+        self.player_data["high_scores"] = high_scores
+
+    def _check_achievements(self):
+        """Check and grant achievements based on current scores"""
+        achievements = self.player_data.get("achievements", [])
+        
+        if 1 not in achievements:
+            component_logger.info("Granting achievement 1 for answering a question")
+            PlayerDataContext.achievement_granter(1)
+
+        total_score = sum(entry.get("score", 0) for entry in self.player_data.get("score", []))
+
+        if 2 not in achievements and total_score >= 10:
+            component_logger.info(f"Granting achievement 2 for answering 10 questions (total: {total_score})")
+            PlayerDataContext.achievement_granter(2)
+
+        if 3 not in achievements and total_score >= 20:
+            component_logger.info(f"Granting achievement 3 for answering 20 questions (total: {total_score})")
+            PlayerDataContext.achievement_granter(3)

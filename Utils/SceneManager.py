@@ -23,18 +23,22 @@ class SceneManager:
         self.current_scene = None
         self.screen = screen
 
+    # this method sets the current scene to the given scene and logs the switch
     def set_scene(self, scene):
         scene_logger.info(f"Scene Manager: Switching to {scene.__class__.__name__}")
         self.current_scene = scene
 
+    # this method handles the events for the current scene
     def handle_events(self, events):
         if self.current_scene:
             self.current_scene.handle_events(events)
 
+    # this method updates the current scene with the given delta time
     def update(self, delta_time):
         if self.current_scene:
             self.current_scene.update(delta_time)
 
+    # this method renders the current scene to the screen
     def render(self, screen):
         if self.current_scene:
             self.current_scene.render(screen)

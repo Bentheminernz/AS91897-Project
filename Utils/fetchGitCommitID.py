@@ -3,6 +3,7 @@ from Utils.loggerConfig import utils_logger
 
 
 # this function fetches the short commit ID of the current git repository and returns it as a string.
+# this function is used for the window title bar of the game :)
 def fetch_git_commit_id():
     try:
         commit_id = subprocess.check_output(

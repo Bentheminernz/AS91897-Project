@@ -42,7 +42,6 @@ def update_data(new_data=None, **kwargs):
 
 
 def is_sound_enabled():
-    utils_logger.info("Checking sound setting...")
     return get_data().get("settings", {}).get("sound", True)
 
 

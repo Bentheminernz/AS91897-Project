@@ -74,9 +74,19 @@ class SettingsScene(Scene):
             font_size=30,
             color=(255, 255, 255),
             bg_color=(0, 100, 0),
-            button_action=self.save_settings,
+            button_action=lambda: self.return_to_home(save=True),
         )
         self.all_buttons.add(save_button)
+
+        back_button = Button(
+            "Return to Home without Saving",
+            (center_x, start_y + item_spacing * 4.75),
+            font_size=20,
+            color=(255, 255, 255),
+            bg_color=(0, 0, 100),
+            button_action=lambda: self.return_to_home(save=False),
+        )
+        self.all_buttons.add(back_button)
 
         title_font_size = int(height * 0.1)
         self.title_text = pygame.font.Font(None, title_font_size).render(
@@ -90,12 +100,14 @@ class SettingsScene(Scene):
         self.player_data["settings"]["sound"] = is_checked
         utils_logger.info(f"Sound setting changed to: {is_checked}")
 
-    def save_settings(self):
+    def return_to_home(self, save=True):
         from Scenes.HomeScene import HomeScene
+        
+        if save:
+            self.player_data["player_name"] = self.name_textfield.text
+            PlayerDataContext.update_data(self.player_data)
+            utils_logger.info("Settings saved successfully.")
 
-        self.player_data["player_name"] = self.name_textfield.text
-        PlayerDataContext.update_data(self.player_data)
-        utils_logger.info("Settings saved successfully.")
         self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
     def reset_game(self):

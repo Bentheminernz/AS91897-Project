@@ -128,7 +128,7 @@ class GameScene(Scene):
         from Scenes.HomeScene import HomeScene
 
         self.pause_overlay = pygame.Surface(self.window_size, pygame.SRCALPHA)
-        self.pause_overlay.fill((0, 0, 0, 128))
+        self.pause_overlay.fill((0, 0, 0, 180))
 
         self.pause_buttons.empty()
 
