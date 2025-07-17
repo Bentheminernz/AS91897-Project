@@ -17,6 +17,7 @@ class Button(pygame.sprite.Sprite):
         bg_color=(0, 0, 0),
         button_action=None,
     ):
+        # initialize the parent class
         super().__init__()
         self.font = pygame.font.Font(None, font_size)
         self.text = text
