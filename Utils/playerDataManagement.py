@@ -18,7 +18,16 @@ default_player_data = {
             "score": 0,
         },
     ],
-    "completed_questions": [],
+    "completed_questions": [
+        {
+            "topic": 1,
+            "questions": [],
+        },
+        {
+            "topic": 2,
+            "questions": [],
+        },
+    ],
     "completed_intro": False,
     "settings": {
         "sound": True,
@@ -94,6 +103,10 @@ def validate_player_data(player_data):
         save_logger.error("Completed questions must be a list.")
         return False
 
+    if not all(isinstance(q, dict) for q in player_data["completed_questions"]):
+        save_logger.error("Each completed question must be a dictionary.")
+        return False
+
     if not isinstance(player_data["completed_intro"], bool):
         save_logger.error("Completed intro must be a boolean.")
         return False
@@ -116,6 +129,7 @@ def validate_player_data(player_data):
 
 def calculate_checksum(player_data):
     serialized = json.dumps(player_data, sort_keys=True)
+    save_logger.info("Calculating checksum for player data")
     return hashlib.sha256(serialized.encode()).hexdigest()
 
 

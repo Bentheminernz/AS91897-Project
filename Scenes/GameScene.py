@@ -14,7 +14,9 @@ class GameScene(Scene):
         self.scene_manager = scene_manager
         self.topic_id = topic_id
         self.player_data = PlayerDataContext.get_data()
-        self.completed_questions = self.player_data.get("completed_questions", [])
+        self.completed_questions = PlayerDataContext.get_completed_questions(
+            self.topic_id
+        )
         self.has_completed_all_questions = False
 
         self.paused = False

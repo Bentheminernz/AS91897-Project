@@ -15,6 +15,7 @@ class HomeScene(Scene):
         self.all_buttons = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()
         self.player_name = PlayerDataContext.get_player_name()
+        self.is_showing_topic_selection = False
 
         self.window_size = pygame.display.get_surface().get_size()
 
@@ -26,6 +27,7 @@ class HomeScene(Scene):
         )
 
     def create_ui(self):
+        self.is_showing_topic_selection = False
         self.all_buttons.empty()
         self.all_textfields.empty()
 
@@ -88,6 +90,7 @@ class HomeScene(Scene):
         self.gradient = VerticalGradient((0, 0, 0), (0, 0, 100), width, height)
 
     def show_topic_selection_ui(self):
+        self.is_showing_topic_selection = True
         self.all_buttons.empty()
         self.all_textfields.empty()
 
@@ -112,7 +115,7 @@ class HomeScene(Scene):
 
         back_button = Button(
             "Back to Menu",
-            (center_x, start_y + button_spacing * len(self.topics)),
+            (center_x, start_y + button_spacing * (len(self.topics) + 1)),
             font_size=int(height * 0.05),
             color=(255, 255, 255),
             bg_color=(100, 0, 0),
@@ -141,7 +144,10 @@ class HomeScene(Scene):
         current_size = pygame.display.get_surface().get_size()
         if current_size != self.window_size:
             self.window_size = current_size
-            self.create_ui()
+            if self.is_showing_topic_selection:
+                self.show_topic_selection_ui()
+            else:
+                self.create_ui()
 
         self.all_buttons.update()
 

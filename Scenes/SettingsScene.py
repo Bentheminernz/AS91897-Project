@@ -106,6 +106,7 @@ class SettingsScene(Scene):
         for event in events:
             for button in self.all_buttons:
                 if hasattr(button, "handle_event"):
+
                     button.handle_event(event)
 
             for checkbox in self.all_checkboxes:

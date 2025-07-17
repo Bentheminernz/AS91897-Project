@@ -23,12 +23,15 @@ class Checkbox(pygame.sprite.Sprite):
         self.text = text
         self.position = position
         self.size = size
+
         self.font_size = font_size
         self.text_color = text_color
         self.border_color = border_color
         self.check_color = check_color
+
         self.bg_color = bg_color
         self.is_checked = initial_state
+
         self.on_toggle = on_toggle
         self.font = pygame.font.Font(None, font_size)
         self.sound_enabled = PlayerDataContext.is_sound_enabled()

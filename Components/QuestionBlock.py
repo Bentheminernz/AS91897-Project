@@ -61,7 +61,9 @@ class QuestionBlock(pygame.sprite.Sprite):
                         score_entry["score"] += 1
                         break
 
-                self.player_data["completed_questions"].append(self.question_id)
+                self.player_data["completed_questions"][self.topic_id][
+                    "questions"
+                ].append(self.question_id)
 
                 high_scores = self.player_data.get("high_scores", [])
 
@@ -85,13 +87,23 @@ class QuestionBlock(pygame.sprite.Sprite):
 
                 if (
                     2 not in self.player_data["achievements"]
-                    and len(self.player_data["completed_questions"]) >= 10
+                    and len(
+                        self.player_data["completed_questions"][self.topic_id][
+                            "questions"
+                        ]
+                    )
+                    >= 10
                 ):
                     PlayerDataContext.achievement_granter(2)
 
                 if (
                     3 not in self.player_data["achievements"]
-                    and len(self.player_data["completed_questions"]) >= 20
+                    and len(
+                        self.player_data["completed_questions"][self.topic_id][
+                            "questions"
+                        ]
+                    )
+                    >= 20
                 ):
                     PlayerDataContext.achievement_granter(3)
 

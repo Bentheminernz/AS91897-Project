@@ -6,6 +6,7 @@ class VerticalGradient:
         self.color1 = color1
         self.color2 = color2
         self.width = width
+
         self.height = height
         self.gradient_surface = pygame.Surface((width, height))
         self.create_gradient()

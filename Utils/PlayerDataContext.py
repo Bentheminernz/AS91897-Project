@@ -74,7 +74,10 @@ def reset_completed_questions():
     if _player_data is None:
         initialize()
 
-    _player_data["completed_questions"] = []
+    _player_data["completed_questions"] = [
+        {"topic": 1, "questions": []},
+        {"topic": 2, "questions": []},
+    ]
     playerDataManagement.save_player_data(_player_data)
     utils_logger.info("Reset completed questions in player data")
 
@@ -93,3 +96,34 @@ def save():
     if _player_data is not None:
         playerDataManagement.save_player_data(_player_data)
         utils_logger.info("Global player data saved")
+
+
+def get_completed_questions(topic_id):
+    global _player_data
+    if _player_data is None:
+        initialize()
+
+    completed_questions = _player_data.get("completed_questions", [])
+    for topic in completed_questions:
+        if topic.get("topic") == topic_id:
+            return topic.get("questions", [])
+
+    return []
+
+
+def add_completed_question(topic_id, question_id):
+    global _player_data
+    if _player_data is None:
+        initialize()
+
+    completed_questions = _player_data.get("completed_questions", [])
+    for topic in completed_questions:
+        if topic.get("topic") == topic_id:
+            topic["questions"].append(question_id)
+            playerDataManagement.save_player_data(_player_data)
+            utils_logger.info(
+                f"Added completed question {question_id} to topic {topic_id}"
+            )
+            return
+
+    utils_logger.warning(f"Topic {topic_id} not found in completed questions")
