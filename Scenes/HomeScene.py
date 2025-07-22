@@ -11,6 +11,7 @@ from Utils import PlayerDataContext
 class HomeScene(Scene):
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
+
         self.player_data = PlayerDataContext.get_data()
         self.all_buttons = pygame.sprite.Group()
         self.all_textfields = pygame.sprite.Group()

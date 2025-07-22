@@ -4,6 +4,8 @@ import os
 
 # This module sets up logging for the game, scene, and component modules.
 # It creates a logger for each component and sets the log level to INFO.
+
+
 # The log messages are formatted to include the timestamp, logger name, log level, and message.
 def setup_logger(name, log_file, level=logging.INFO):
     log_file_path = "./Logs/"
