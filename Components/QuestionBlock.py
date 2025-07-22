@@ -20,6 +20,7 @@ class QuestionBlock(pygame.sprite.Sprite):
     ):
         super().__init__()
         width, height = 280, 120
+
         border_thickness = 8
         self.text = str(text)
         self.is_killed = False
@@ -87,13 +88,13 @@ class QuestionBlock(pygame.sprite.Sprite):
         if self.rect.colliderect(player.rect) and not self.is_killed:
             component_logger.info(f"Player collided with question block: {self.text}")
             component_logger.info(f"The answer was {self.is_correct}")
-            
+
             if self.is_correct:
                 component_logger.info("Correct answer!")
                 self._update_scores()
                 self._check_achievements()
                 self.correct_audio.play()
-                
+
                 if self.on_correct_answer:
                     self.on_correct_answer()
             else:
@@ -123,17 +124,23 @@ class QuestionBlock(pygame.sprite.Sprite):
     def _check_achievements(self):
         """Check and grant achievements based on current scores"""
         achievements = self.player_data.get("achievements", [])
-        
+
         if 1 not in achievements:
             component_logger.info("Granting achievement 1 for answering a question")
             PlayerDataContext.achievement_granter(1)
 
-        total_score = sum(entry.get("score", 0) for entry in self.player_data.get("score", []))
+        total_score = sum(
+            entry.get("score", 0) for entry in self.player_data.get("score", [])
+        )
 
         if 2 not in achievements and total_score >= 10:
-            component_logger.info(f"Granting achievement 2 for answering 10 questions (total: {total_score})")
+            component_logger.info(
+                f"Granting achievement 2 for answering 10 questions (total: {total_score})"
+            )
             PlayerDataContext.achievement_granter(2)
 
         if 3 not in achievements and total_score >= 20:
-            component_logger.info(f"Granting achievement 3 for answering 20 questions (total: {total_score})")
+            component_logger.info(
+                f"Granting achievement 3 for answering 20 questions (total: {total_score})"
+            )
             PlayerDataContext.achievement_granter(3)

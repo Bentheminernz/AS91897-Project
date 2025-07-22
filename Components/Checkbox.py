@@ -21,6 +21,7 @@ class Checkbox(pygame.sprite.Sprite):
     ):
         # initialize the parent class
         super().__init__()
+
         self.text = text
         self.position = position
         self.size = size

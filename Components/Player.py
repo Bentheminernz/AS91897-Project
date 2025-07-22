@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(topleft=position)
         self.speed = 350
+        self.base_jump_speed = 350
         self.gravity_force = 0
         self.jump_audio = pygame.mixer.Sound("./Assets/Audio/Jump.ogg")
         self.jump_audio.set_volume(1.0 if PlayerDataContext.is_sound_enabled() else 0.0)
@@ -118,7 +119,9 @@ class Player(pygame.sprite.Sprite):
         ):
             is_jump = True
             direction.y -= 1.0
-            self.gravity_force = -self.speed
+            height_scale = (screen.get_height() / 600.0) ** 1.7
+            scaled_jump_speed = self.base_jump_speed * height_scale
+            self.gravity_force = -scaled_jump_speed
             self.jump_audio.play()
 
         # normalises the players movement so diagonal movement is not faster
@@ -128,7 +131,9 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom >= screen.get_height():
             is_jump = False
 
-        # updates the players position
+        # updates the players p
+        #
+        # osition
         self.rect.x += direction.x * movement
         self.rect.y += direction.y * movement
 
@@ -139,6 +144,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = screen.get_width()
         if self.rect.top < 0:
             self.rect.top = 0
+
         if self.rect.bottom > screen.get_height():
             self.rect.bottom = screen.get_height()
 

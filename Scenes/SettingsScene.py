@@ -11,6 +11,7 @@ from Utils import playerDataManagement
 class SettingsScene(Scene):
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
+
         self.player_data = PlayerDataContext.get_data()
 
         self.all_sprites = pygame.sprite.Group()
@@ -102,7 +103,7 @@ class SettingsScene(Scene):
 
     def return_to_home(self, save=True):
         from Scenes.HomeScene import HomeScene
-        
+
         if save:
             self.player_data["player_name"] = self.name_textfield.text
             PlayerDataContext.update_data(self.player_data)

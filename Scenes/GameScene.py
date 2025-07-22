@@ -103,6 +103,7 @@ class GameScene(Scene):
 
         start_x = 125
         start_y = 200
+
         spacing = 300
 
         random.shuffle(answers)
