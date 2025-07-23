@@ -10,8 +10,10 @@ from Utils.loggerConfig import game_logger
 from Utils.fetchRandomQuestion import fetch_random_question
 
 
+# this is the main game scene where the player interacts with question blocks
 class GameScene(Scene):
     def __init__(self, scene_manager, topic_id):
+        # initialize the parent class
         self.scene_manager = scene_manager
         self.topic_id = topic_id
         self.player_data = PlayerDataContext.get_data()
@@ -43,12 +45,14 @@ class GameScene(Scene):
         self.create_ui()
         self.create_pause_menu()
 
+    # function to reset the game state
     def reset_game(self):
         PlayerDataContext.reset_completed_questions()
         self.completed_questions = []
         self.has_completed_all_questions = False
         self.load_new_question()
 
+    # loads a new random question from the json
     def load_new_question(self):
         for block in self.question_blocks:
             self.all_sprites.remove(block)
@@ -61,6 +65,7 @@ class GameScene(Scene):
         random_question = None
         max_questions = 0
 
+        # try to fetch a random question that hasn't been answered yet
         while attempts < max_attempts:
             random_question_raw = fetch_random_question(self.topic_id)
             random_question = random_question_raw.get("question", {})
@@ -71,6 +76,7 @@ class GameScene(Scene):
                 break
             attempts += 1
 
+        # if we have tried too many times and still haven't found a question
         if attempts >= max_attempts:
             self.has_completed_all_questions = True
             self.question_text = "All questions completed."
@@ -106,6 +112,7 @@ class GameScene(Scene):
 
         spacing = 300
 
+        # shuffle the answers and create question blocks for each answer
         random.shuffle(answers)
         for i, answer in enumerate(answers):
             answer_text = answer.get("answer_text", "No answer text found")
@@ -125,6 +132,7 @@ class GameScene(Scene):
             self.all_sprites.add(block)
             self.question_blocks.append(block)
 
+    # function to create the pause menu
     def create_pause_menu(self):
         from Scenes.HomeScene import HomeScene
 
@@ -183,10 +191,12 @@ class GameScene(Scene):
         self.pause_buttons.add(menu_button)
         self.pause_buttons.add(exit_button)
 
+    # function to toggle the pause state of the game
     def toggle_pause(self):
         self.paused = not self.paused
         game_logger.info(f"Game {'paused' if self.paused else 'resumed'}")
 
+    # creates the UI elements for the game scene
     def create_ui(self):
         self.all_buttons.empty()
 
@@ -216,6 +226,7 @@ class GameScene(Scene):
 
         self.gradient = VerticalGradient((39, 31, 35), (36, 21, 30), width, height)
 
+    # handles the events in the game scene
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.QUIT:
@@ -242,6 +253,7 @@ class GameScene(Scene):
 
         return True
 
+    # updates the game scene every frame
     def update(self, delta_time):
         current_size = pygame.display.get_surface().get_size()
         if current_size != self.window_size:
@@ -249,6 +261,7 @@ class GameScene(Scene):
             self.create_ui()
             self.create_pause_menu()
 
+        # if the game is paused, we don't update the player or question block
         if not self.paused:
             self.player.gravity(delta_time, self.scene_manager.screen)
 
@@ -276,6 +289,7 @@ class GameScene(Scene):
         else:
             self.pause_buttons.update()
 
+    # renders the game scene
     def render(self, screen):
         screen.fill((0, 0, 0))
         screen.blit(self.gradient.gradient_surface, (0, 0))

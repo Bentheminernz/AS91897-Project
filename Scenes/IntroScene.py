@@ -7,7 +7,9 @@ from Utils.loggerConfig import game_logger
 from Utils import PlayerDataContext
 
 
+# this is the intro scene of the game, where the player can enter their name and continue to the home scene
 class IntroScene(Scene):
+    # initializes the intro scene
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
         self.player_data = PlayerDataContext.get_data()
@@ -39,6 +41,7 @@ class IntroScene(Scene):
         )
         self.all_buttons.add(self.continue_button)
 
+    # function to check if the player has completed the intro
     def continue_action(self):
         if not self.name_textfield.text:
             game_logger.error("Player name is empty. Exiting.")
@@ -49,6 +52,7 @@ class IntroScene(Scene):
         PlayerDataContext.update_data(self.player_data)
         self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
+    # function to create the UI for the intro scene
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.QUIT:
@@ -63,12 +67,14 @@ class IntroScene(Scene):
 
         return True
 
+    # renders the intro scene
     def render(self, screen):
         screen.fill((0, 0, 0))
         screen.blit(self.intro_text, (200, 100))
         self.all_buttons.draw(screen)
         self.all_textfields.draw(screen)
 
+    # updates the intro scene every frame
     def update(self, delta_time):
         self.all_buttons.update()
         self.all_textfields.update()

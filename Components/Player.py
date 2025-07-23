@@ -81,13 +81,17 @@ class Player(pygame.sprite.Sprite):
         was_moving = self.is_moving
         self.is_moving = False
 
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and not (
+            keys[pygame.K_RIGHT] or keys[pygame.K_d]
+        ):
             direction.x -= 1
             self.is_moving = True
             if self.facing_right:
                 self.facing_right = False
 
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and not (
+            keys[pygame.K_LEFT] or keys[pygame.K_a]
+        ):
             direction.x += 1
             self.is_moving = True
             if not self.facing_right:

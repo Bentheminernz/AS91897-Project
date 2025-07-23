@@ -7,8 +7,10 @@ from Components.Button import Button
 from Components.AchievementListItem import AchievementListItem
 
 
+# This is my scene for showing the achievements of the player and the locked ones
 class AchievementsScene(Scene):
     def __init__(self, scene_manager):
+        # intialize the parent class
         self.scene_manager = scene_manager
         self.player_data = PlayerDataContext.get_data()
         self.achievements = self.fetch_achievements()
@@ -27,11 +29,13 @@ class AchievementsScene(Scene):
 
         self.create_ui()
 
+    # function for returning to the home scene
     def return_home(self):
         from Scenes.HomeScene import HomeScene
 
         self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
+    # creates the ui for the achievements scene
     def create_ui(self):
         self.unlocked_list_items.empty()
         self.locked_list_items.empty()
@@ -40,6 +44,7 @@ class AchievementsScene(Scene):
         width, height = self.window_size
         center_x = width // 2
 
+        # headers for unlocked and locked achievements
         self.unlocked_header = self.title_font.render(
             "Unlocked Achievements", True, (255, 255, 255)
         )
@@ -57,6 +62,7 @@ class AchievementsScene(Scene):
         unlocked_start_y = height * 0.20
         item_spacing = height * 0.12
 
+        # create the list items for unlocked achievements
         for index, achievement in enumerate(self.unlocked_achievements):
             item = AchievementListItem(
                 achievement,
@@ -69,6 +75,7 @@ class AchievementsScene(Scene):
 
         locked_start_y = height * 0.65
 
+        # create the list items for locked achievements
         locked_achievements = [
             a for a in self.achievements if a not in self.unlocked_achievements
         ]
@@ -82,6 +89,7 @@ class AchievementsScene(Scene):
             )
             self.locked_list_items.add(item)
 
+        # create the scroll areas for unlocked and locked achievements
         self.unlocked_scroll_area = pygame.Rect(
             0,
             self.unlocked_header_rect.bottom,
@@ -105,6 +113,7 @@ class AchievementsScene(Scene):
         )
         self.buttons.add(self.back_button)
 
+    # handles events for the achievements scene
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.QUIT:
@@ -116,6 +125,7 @@ class AchievementsScene(Scene):
 
                     self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
+            # handle mouse wheel scrolling
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 4:
                     if self.unlocked_scroll_area.collidepoint(event.pos):
@@ -134,6 +144,7 @@ class AchievementsScene(Scene):
 
         return True
 
+    # fetches the achievements from the JSON file
     def fetch_achievements(self):
         try:
             with open("Assets/data/achievements.json", "r") as file:
@@ -144,6 +155,7 @@ class AchievementsScene(Scene):
             game_logger.error(f"An unexpected error occurred: {e}")
             exit(-1)
 
+    # fetches the unlocked achievements from the player data
     def fetch_unlocked_achievements(self):
         return [
             achievement
@@ -151,6 +163,7 @@ class AchievementsScene(Scene):
             if achievement["id"] in self.player_data.get("achievements", [])
         ]
 
+    # updates the scene every frame
     def update(self, delta_time):
         for item in self.unlocked_list_items:
             item.rect.y = item.rect.y + self.unlocked_scroll_y
@@ -168,6 +181,7 @@ class AchievementsScene(Scene):
 
         self.buttons.update()
 
+    # renders the achievements scene
     def render(self, screen):
         screen.fill((0, 0, 0))
 
@@ -184,6 +198,7 @@ class AchievementsScene(Scene):
         )
         locked_surface.fill((0, 0, 0))
 
+        # draw the unlocked and locked achievements
         for item in self.unlocked_list_items:
             if self.unlocked_scroll_area.colliderect(item.rect):
                 adjusted_rect = item.rect.copy()
