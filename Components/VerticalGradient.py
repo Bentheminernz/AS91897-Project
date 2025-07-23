@@ -2,6 +2,7 @@ import pygame
 
 
 class VerticalGradient:
+    # initializes the vertical gradient with two colors and dimensions
     def __init__(self, color1, color2, width, height):
         self.color1 = color1
         self.color2 = color2
@@ -12,6 +13,8 @@ class VerticalGradient:
         self.gradient_surface = pygame.Surface((width, height))
         self.create_gradient()
 
+    # creates the vertical gradient by interpolating between the two colors
+    # it draws horizontal lines from the top to the bottom of the surface
     def create_gradient(self):
         for y in range(self.height):
             ratio = y / self.height

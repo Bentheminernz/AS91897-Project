@@ -8,6 +8,7 @@ from Utils import PlayerDataContext
 from Utils import playerDataManagement
 
 
+# this is the settings scene of the game, players can change their name, toggle sound effects, reset the game, or return to the home scene
 class SettingsScene(Scene):
     def __init__(self, scene_manager):
         self.scene_manager = scene_manager
@@ -23,6 +24,7 @@ class SettingsScene(Scene):
 
         self.create_ui()
 
+    # function to return to the home scene
     def create_ui(self):
         self.all_buttons.empty()
         self.all_checkboxes.empty()
@@ -95,12 +97,14 @@ class SettingsScene(Scene):
         )
         self.title_pos = (center_x * 0.75, height * 0.15)
 
+    # function to toggle sound effects
     def toggle_sound(self, is_checked):
         if "settings" not in self.player_data:
             self.player_data["settings"] = {}
         self.player_data["settings"]["sound"] = is_checked
         utils_logger.info(f"Sound setting changed to: {is_checked}")
 
+    # function to return to the home scene, optionally saving the settings
     def return_to_home(self, save=True):
         from Scenes.HomeScene import HomeScene
 
@@ -111,10 +115,12 @@ class SettingsScene(Scene):
 
         self.scene_manager.set_scene(HomeScene(self.scene_manager))
 
+    # function to reset the game data
     def reset_game(self):
         playerDataManagement.delete_player_data()
         exit(0)
 
+    # function to handle events in the settings scene
     def handle_events(self, events):
         for event in events:
             for button in self.all_buttons:
@@ -138,6 +144,7 @@ class SettingsScene(Scene):
 
         return True
 
+    # updates the settings scene every frame
     def update(self, delta_time):
         current_size = pygame.display.get_surface().get_size()
         if current_size != self.window_size:
@@ -148,6 +155,7 @@ class SettingsScene(Scene):
         self.all_checkboxes.update()
         self.all_textfields.update()
 
+    # renders the settings scene
     def render(self, screen):
         screen.fill((0, 0, 0))
 

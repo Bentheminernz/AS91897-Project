@@ -5,6 +5,7 @@ import uuid
 import hashlib
 import time
 
+# this is the default player data structure
 default_player_data = {
     "id": str(uuid.uuid4()),
     "player_name": "Player",
@@ -46,8 +47,10 @@ default_player_data = {
 }
 
 
+# this function validates the player data structure
 def validate_player_data(player_data):
     save_logger.info("Validating player data...")
+    # required top-level keys
     required_top_keys = [
         "id",
         "player_name",
@@ -59,11 +62,13 @@ def validate_player_data(player_data):
         "high_scores",
     ]
 
+    # check if all required keys are present
     for key in required_top_keys:
         if key not in player_data:
             save_logger.error(f"Missing key: {key}")
             return False
 
+    # check types of required keys
     if "settings" in player_data:
         if "sound" not in player_data["settings"]:
             save_logger.error("Missing key: settings.sound")
@@ -91,6 +96,7 @@ def validate_player_data(player_data):
                 save_logger.error("Score 'topic' and 'score' must be integers.")
                 return False
 
+    # check completed questions structure
     if not isinstance(player_data["id"], str):
         save_logger.error("ID must be a string.")
         return False
@@ -127,12 +133,14 @@ def validate_player_data(player_data):
     return True
 
 
+# calculate the checksum for the player data (used for tamper detection)
 def calculate_checksum(player_data):
     serialized = json.dumps(player_data, sort_keys=True)
     save_logger.info("Calculating checksum for player data")
     return hashlib.sha256(serialized.encode()).hexdigest()
 
 
+# this function initializes the player data if it is not already set
 def save_player_data(player_data):
     save_logger.info("Saving player data...")
     if not os.path.exists("./SaveData"):
@@ -140,10 +148,12 @@ def save_player_data(player_data):
         os.makedirs("./SaveData", exist_ok=True)
 
     try:
+        # if player data is not valid, reset to default
         if not validate_player_data(player_data):
             save_logger.error("Player data validation failed. Saving default data.")
             player_data = default_player_data
 
+        # create a save wrapper with metadata
         save_wrapper = {
             "data": player_data,
             "metadata": {
@@ -152,8 +162,10 @@ def save_player_data(player_data):
             },
         }
 
+        # calculate and add checksum
         save_wrapper["checksum"] = calculate_checksum(player_data)
 
+        # write the player data to a JSON file
         with open("./SaveData/player_data.json", "w") as f:
             save_logger.info("Writing player data to JSON file...")
             json.dump(save_wrapper, f, indent=4)
@@ -163,6 +175,7 @@ def save_player_data(player_data):
 
     except Exception as e:
         save_logger.error(f"Error saving player data: {e}")
+        # if saving fails, create a backup with default data
         save_wrapper = {
             "data": default_player_data,
             "metadata": {
@@ -175,6 +188,7 @@ def save_player_data(player_data):
             json.dump(save_wrapper, f, indent=4)
 
 
+# function to load the player data from the JSON file
 def load_player_data():
     save_logger.info("Loading player data...")
     player_data_file = "./SaveData/player_data.json"
@@ -184,10 +198,12 @@ def load_player_data():
     if os.path.exists(player_data_file):
         save_logger.info("Player data file found.")
         try:
+            # opens the player data file and reads the content
             with open(player_data_file, "r") as f:
                 save_logger.info("Reading player data from JSON file...")
                 file_content = json.load(f)
 
+                # check if the file content is in the expected format
                 if (
                     isinstance(file_content, dict)
                     and "data" in file_content
@@ -196,12 +212,15 @@ def load_player_data():
                     player_data = file_content["data"]
                     stored_checksum = file_content["checksum"]
 
+                    # verify the checksum
                     calculated_checksum = calculate_checksum(player_data)
                     if calculated_checksum != stored_checksum:
                         save_logger.error(
                             "Checksum verification failed! Save file may have been tampered with."
                         )
                         main_data = None
+
+                    # validate the player data structure
                     else:
                         if validate_player_data(player_data):
                             main_data = player_data
@@ -212,6 +231,7 @@ def load_player_data():
         except Exception as e:
             save_logger.error(f"Error loading main save file: {e}")
 
+    # if the main data is not loaded, try to load from the backup file
     if main_data is None and os.path.exists(backup_file):
         save_logger.info("Trying backup save file...")
         try:
@@ -241,6 +261,7 @@ def load_player_data():
     return main_data
 
 
+# function to reset the player data, clearing all achievements and scores
 def delete_player_data():
     save_logger.info("Deleting player data...")
     if os.path.exists("./SaveData/player_data.json"):

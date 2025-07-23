@@ -58,12 +58,15 @@ class Button(pygame.sprite.Sprite):
             if not mouse_pressed:
                 self.is_pressed = False
 
+    # handles events for the button
     def handle_event(self, event):
+        # if the button is pressed, it plays a sound and performs the action
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if self.rect.collidepoint(event.pos) and self.is_pressed:
                 self.perform_action()
                 self.button_sound.play()
                 self.is_pressed = False
+        # if the mouse is pressed down on the button, it sets the is_pressed flag
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
                 self.is_pressed = True

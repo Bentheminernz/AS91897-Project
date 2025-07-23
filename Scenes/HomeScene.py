@@ -8,8 +8,10 @@ from Scenes.AchievementsScene import AchievementsScene
 from Utils import PlayerDataContext
 
 
+# This is the home scene of the game, where the player can start the game, view settings, achievements, or quit
 class HomeScene(Scene):
     def __init__(self, scene_manager):
+        # initialize the parent class
         self.scene_manager = scene_manager
 
         self.player_data = PlayerDataContext.get_data()
@@ -27,6 +29,7 @@ class HomeScene(Scene):
             ("Health", 2),
         )
 
+    # function to return to the home scene
     def create_ui(self):
         self.is_showing_topic_selection = False
         self.all_buttons.empty()
@@ -95,6 +98,7 @@ class HomeScene(Scene):
 
         self.gradient = VerticalGradient((0, 0, 0), (0, 0, 100), width, height)
 
+    # function to show the topic selection UI
     def show_topic_selection_ui(self):
         self.is_showing_topic_selection = True
         self.all_buttons.empty()
@@ -135,13 +139,16 @@ class HomeScene(Scene):
         )
         self.title_pos = (center_x * 0.75, height * 0.15)
 
+    # checks if the player has any score in the player data
     def has_any_score(self):
         scores = self.player_data.get("score", [])
         return any(entry.get("score", 0) > 0 for entry in scores)
 
+    # starts the game with the selected topic
     def start_game(self, topic_id):
         self.scene_manager.set_scene(GameScene(self.scene_manager, topic_id))
 
+    # handles the events in the home scene
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.QUIT:
@@ -168,6 +175,7 @@ class HomeScene(Scene):
 
         return True
 
+    # updates the home scene every frame
     def update(self, delta_time):
         current_size = pygame.display.get_surface().get_size()
         if current_size != self.window_size:
@@ -179,6 +187,7 @@ class HomeScene(Scene):
 
         self.all_buttons.update()
 
+    # renders the home scene
     def render(self, screen):
         screen.fill((0, 0, 0))
         screen.blit(self.gradient.gradient_surface, (0, 0))

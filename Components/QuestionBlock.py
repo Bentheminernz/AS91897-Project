@@ -64,8 +64,8 @@ class QuestionBlock(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(topleft=position)
 
+    # wraps the text to fit within the specified width
     def wrap_text(self, text, font, max_width):
-        """wraps the text to fit within the specified max width"""
         words = text.split(" ")
         lines = []
         current_line = ""
@@ -104,6 +104,7 @@ class QuestionBlock(pygame.sprite.Sprite):
             self.is_killed = True
             self.kill()
 
+    # handles updating the scores and achievements
     def _update_scores(self):
         score_entries = self.player_data.get("score", [])
         for score_entry in score_entries:
@@ -121,8 +122,8 @@ class QuestionBlock(pygame.sprite.Sprite):
 
         self.player_data["high_scores"] = high_scores
 
+    # checks for achievements based on the player's scores
     def _check_achievements(self):
-        """Check and grant achievements based on current scores"""
         achievements = self.player_data.get("achievements", [])
 
         if 1 not in achievements:
